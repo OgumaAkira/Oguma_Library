@@ -1,6 +1,6 @@
 //*****************************************************************************
 //
-// 弾UI処理 [bullet.h]
+// 弾UI処理 [bulletUI.h]
 // Author : 小熊朗
 //
 //*****************************************************************************
@@ -22,23 +22,22 @@
 class CBulletUI :public CScene
 {
 public:
-	CBulletUI(int nPriority = 8);				//コンストラクタ
-	~CBulletUI();				//デストラクタ
+	CBulletUI(int nPriority = 8);						//コンストラクタ
+	~CBulletUI();										//デストラクタ
 
 	//メンバ関数
-	static HRESULT Load(void);		//読み込み処理
-	static void UnLoad(void);		//テクスチャの破棄
-	static CBulletUI *Create();
-
-	HRESULT Init();			//初期化処理
-	void Uninit(void);		//終了処理
-	void Update(void);		//更新処理
-	void Draw(void);		//描画処理
-	void SetBulletCnt(int bulletcnt);
-	int GetBulletCnt(void) { return m_BulletCnt; }
-	void SetbUse(void) { m_bUse = true; }
-	bool GetbUse(void) { return m_bUse; }
-	void Loading(void);
+	static HRESULT Load(void);							//読み込み処理
+	static void UnLoad(void);							//テクスチャの破棄
+	static CBulletUI *Create();							//クリエイト関数
+	HRESULT Init();										//初期化関数
+	void Uninit(void);									//終了関数
+	void Update(void);									//更新関数
+	void Draw(void);									//描画関数
+	void SetBulletCnt(int bulletcnt);					//残弾格納関数
+	int GetBulletCnt(void) { return m_BulletCnt; }		//残弾取得関数
+	void SetbUse(void) { m_bUse = true; }				//スイッチ情報格納関数
+	bool GetbUse(void) { return m_bUse; }				//スイッチ情報取得関数
+	void Loading(void);									//装填関数
 
 private:
 	//メンバ変数

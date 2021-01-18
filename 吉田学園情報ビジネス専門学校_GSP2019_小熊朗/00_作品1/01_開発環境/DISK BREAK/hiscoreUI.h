@@ -34,8 +34,8 @@ public:
 		HISCORETYPE_MAX				//最大数
 	}HISCORETYPE;
 
-	CHiScoreUI(int nPriority = 8);		//コンストラクタ
-	~CHiScoreUI();						//デストラクタ
+	CHiScoreUI(int nPriority = 8);														//コンストラクタ
+	~CHiScoreUI();																		//デストラクタ
 
 	//メンバ関数
 	static CHiScoreUI *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, HISCORETYPE nType);	//クリエイト関数

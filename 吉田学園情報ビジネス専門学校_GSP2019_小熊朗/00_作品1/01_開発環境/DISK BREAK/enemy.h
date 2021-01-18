@@ -1,6 +1,6 @@
 //*****************************************************************************
 //
-// 敵の処理 [enemy.cpp]
+// 敵の処理 [enemy.h]
 // Author : 小熊朗
 //
 //*****************************************************************************
@@ -31,22 +31,19 @@ class CEnemy :public CScene2D
 {
 public:
 
-	//構造体定義
+	//構造体定義(状態)
 	typedef enum
 	{
-		ENEMYSTATE_NORMAL = 0,
-		ENEMYSTATE_DAMAGE,
-		ENEMYRSTATE_DEATH,
-		ENEMYS_MAX,
+		ENEMYSTATE_NORMAL = 0,		//通常
+		ENEMYRSTATE_DEATH,			//撃墜
+		ENEMYS_MAX,					//最大数
 	}ENEMYSTATE;
 
-	//構造体定義
+	//構造体定義(種類)
 	typedef enum
 	{
-		ENEMYTYPE_NORMAL = 0,
-		ENEMYTYPE_NORMAL1,
-		ENEMYTYPE_NORMAL2,
-		ENEMYTYPE_MAX
+		ENEMYTYPE_NORMAL = 0,		//敵1
+		ENEMYTYPE_MAX				//最大数
 	}ENEMYTYPE;
 
 	CEnemy(int nPriority = 5);				//コンストラクタ

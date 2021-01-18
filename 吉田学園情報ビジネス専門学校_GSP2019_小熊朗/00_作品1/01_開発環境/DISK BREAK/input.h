@@ -20,10 +20,10 @@
 class CInput
 {
 public:
-	CInput();				//コンストラクタ
+	CInput();													//コンストラクタ
 
 	//純粋仮想関数
-	virtual ~CInput();				//デストラクタ
+	virtual ~CInput();											//デストラクタ
 
 	//メンバ関数
 	virtual HRESULT Init(HINSTANCE hInstance, HWND hWnd);		//初期化関数
@@ -43,8 +43,8 @@ private:
 class CInputKeyboard:public CInput
 {
 public:
-	CInputKeyboard();			//コンストラクタ
-	~CInputKeyboard();			//デストラクタ
+	CInputKeyboard();									//コンストラクタ
+	~CInputKeyboard();									//デストラクタ
 
 	//メンバ関数
 	HRESULT Init(HINSTANCE hInstance, HWND hWnd);		//初期化関数
@@ -55,6 +55,7 @@ public:
 	bool GetKeyRelease(int nKey);						//キーボード情報取得関数(リリース)
 
 private:
+	//メンバ変数
 	BYTE m_aKeyState[NUM_KEY_MAX];						//キーボードの情報
 	BYTE m_aKeyStateOld[NUM_KEY_MAX];					//過去のキーボードの情報
 	BYTE m_aKeyStatePress[NUM_KEY_MAX];					//プレスの場合のキーボードの情報
@@ -68,8 +69,8 @@ private:
 class CMouse:public CInput
 {
 public:
-	CMouse();
-	~CMouse();
+	CMouse();											//コンストラクタ
+	~CMouse();											//デストラクタ
 
 	//メンバ関数
 	HRESULT Init(HINSTANCE hInstance, HWND hWnd);		//初期化関数
@@ -80,9 +81,9 @@ public:
 	bool GetMouseRelease(int nKey);						//キーボード情報取得関数(リリース)
 
 private:
+	//メンバ変数
 	DIMOUSESTATE m_CurrentMouseState;					//!< マウスの現在の入力情報
 	DIMOUSESTATE m_PrevMouseState;						//!< マウスの一フレーム前の入力情報
-
 	BYTE m_aMouseState[NUM_MOUSE_MAX];					//マウスの情報
 	BYTE m_aMouseStateOld[NUM_MOUSE_MAX];				//過去のマウスの情報
 	BYTE m_aMouseStatePress[NUM_MOUSE_MAX];				//プレスの場合のマウスの情報

@@ -1,7 +1,7 @@
 //*****************************************************************************
 //
-// メイン処理 [main.cpp]
-// Author : ポリゴンの表示（複数表示）
+// スコアの処理 [score.h]
+// Author : 小熊朗
 //
 //*****************************************************************************
 #ifndef _SCORE_H_
@@ -18,34 +18,34 @@
 #include "hiscore.h"
 
 //*****************************************************************************
-//スコアクラス宣言
+//スコアのクラス宣言
 //*****************************************************************************
 class CScore :public CScene
 {
 public:
 
-	CScore(int nPriority = 7);				//コンストラクタ
-	~CScore();				//デストラクタ
+	CScore(int nPriority = 7);						//コンストラクタ
+	~CScore();										//デストラクタ
 
 	//メンバ関数
-	static CScore *Create(void);
-	HRESULT Init(void);		//初期化処理
-	void Uninit(void);		//終了処理
-	void Update(void);		//更新処理
-	void Draw(void);		//描画処理
-	void SetScore(int nScore);//スコア値格納処理
-	void AddScore(int nScore);//加算スコア処理
-	int ReadFile(void);
-	void WriteFile(void);
-	static int GetScore(void) { return m_nScore; }
+	static CScore *Create(void);					//クリエイト関数
+	HRESULT Init(void);								//初期化処理
+	void Uninit(void);								//終了処理
+	void Update(void);								//更新処理
+	void Draw(void);								//描画処理
+	void SetScore(int nScore);						//スコア値格納処理
+	void AddScore(int nScore);						//加算スコア処理
+	int ReadFile(void);								//読み込みファイル関数
+	void WriteFile(void);							//書き込みファイル関数
+	static int GetScore(void) { return m_nScore; }	//スコア取得関数
 private:
 	//メンバ変数
-	D3DXVECTOR3				m_move;			//移動量
-	D3DXVECTOR3				m_pos;			// ポリゴンの位置
-	D3DXVECTOR3				m_size;			// ポリゴン大きさ
-	int						m_nCounterAnim;//アニメーションカウンター
-	int						m_nPatternAnim;//アニメーションパターンNo.
+	D3DXVECTOR3				m_move;								//移動量
+	D3DXVECTOR3				m_pos;								// ポリゴンの位置
+	D3DXVECTOR3				m_size;								// ポリゴン大きさ
+	int						m_nCounterAnim;						//アニメーションカウンター
+	int						m_nPatternAnim;						//アニメーションパターンNo.
 	CNumber					*m_apNumber[MAX_SCORE_NUMBER];		//シーン2Dのポインタ配列
-	static int						m_nScore;
+	static int				m_nScore;							//スコア
 };
 #endif

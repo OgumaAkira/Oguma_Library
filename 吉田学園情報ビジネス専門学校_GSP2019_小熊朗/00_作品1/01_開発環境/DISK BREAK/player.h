@@ -1,7 +1,7 @@
 //*****************************************************************************
 //
-// メイン処理 [main.cpp]
-// Author : ポリゴンの表示（複数表示）
+// プレイヤーの処理 [player.h]
+// Author : 小熊朗
 //
 //*****************************************************************************
 #ifndef _PLAYER_H_
@@ -25,37 +25,28 @@
 class CPlayer:public CScene2D
 {
 public:
-	//構造体定義
-	typedef enum
-	{
-		PLAYERSTATE_APPEAR = 0,
-		PLAYERSTATE_NORMAL,
-		PLAYERSTATE_DAMAGE,
-		PLAYERSTATE_DEATH,
-		PLAYERSTATE_MAX
-	}PLAYERSTATE;
+
 
 	CPlayer(int nPriority = 11);				//コンストラクタ
-	~CPlayer();				//デストラクタ
+	~CPlayer();									//デストラクタ
 
 	//メンバ関数
-	static CPlayer *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,OBJTYPE objtype);
-	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 size, OBJTYPE objtype);		//初期化処理
-	void Uninit(void);		//終了処理
-	void Update(void);		//更新処理
-	void Draw(void);		//描画処理
-	void HitDamege(int ndamege);	//ダメージ処理
-	static HRESULT Load(void);		//読み込み処理
-	static void UnLoad(void);		//テクスチャの破棄
+	static CPlayer *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,OBJTYPE objtype);	//クリエイト関数
+	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 size, OBJTYPE objtype);			//初期化関数
+	void Uninit(void);															//終了関数
+	void Update(void);															//更新関数
+	void Draw(void);															//描画関数
+	void HitDamege(int ndamege);												//ダメージ関数
+	static HRESULT Load(void);													//ロード関数
+	static void UnLoad(void);													//アンロード関数
 
 private:
 	//メンバ変数
 	D3DXVECTOR3						m_pos;			// ポリゴンの位置
 	D3DXVECTOR3						m_size;			// ポリゴン大きさ
 	int								m_nHP;			//ライフ
-	PLAYERSTATE						m_state;		//状態
 	static LPDIRECT3DTEXTURE9		m_pTexture;		//テクスチャの情報
-	CFade* m_pFade;
-	CInput* m_pInput;
+	CFade* m_pFade;									//フェードのポインタ
+	CInput* m_pInput;								//入力のポインタ
 };
 #endif 

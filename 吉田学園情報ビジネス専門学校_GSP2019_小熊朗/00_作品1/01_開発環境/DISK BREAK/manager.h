@@ -1,13 +1,14 @@
 //*****************************************************************************
 //
-// メイン処理 [main.cpp]
-// Author : ポリゴンの表示（複数表示）
+// マネージャー処理 [manager.h]
+// Author : 小熊朗
 //
 //*****************************************************************************
 #ifndef _MANAGER_H_
 #define _MANAGER_H_
 
 //*****************************************************************************
+//インクルードファイル
 //*****************************************************************************
 #include "main.h"
 
@@ -48,14 +49,14 @@ public:
 		MODE_END
 	}MODE;
 
-	CManager();				//コンストラクタ
-	~CManager();				//デストラクタ
+	CManager();																	//コンストラクタ
+	~CManager();																//デストラクタ
 
 	//メンバ関数
-	HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bMenu);		//初期化処理
-	void Uninit(void);		//終了処理
-	void Update(void);		//更新処理
-	void Draw(void);		//描画処理
+	HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bMenu);					//初期化関数
+	void Uninit(void);															//終了関数
+	void Update(void);															//更新関数
+	void Draw(void);															//描画関数
 	static CRenderer		*GetRenderer(void)		{ return m_pRenderer; }		//レンダラーの情報取得関数
 	static CInputKeyboard	*GetInputKeyboard(void) { return m_pInputKeyboard; }//キーボード入力情報取得関数
 	static CMouse			*GetMouse(void)			{ return m_pMouse; }		//マウス入力情報取得関数
@@ -72,24 +73,24 @@ public:
 
 private:
 	//メンバ変数
-	static CRenderer		*m_pRenderer;
-	static CScene2D			*m_paScene[MAX_TEXTURE];
-	static CInputKeyboard	*m_pInputKeyboard;
-	static CMouse			*m_pMouse;
-	static CPlayer			*m_pPlayer;
-	static CSound			*m_pSound;
-	static CExplosion		*m_pExplosion;
-	static CBullet			*m_pBullet;
-	static CTitle			*m_pTitle;
-	static CResult			*m_pResult;
-	static CGame			*m_pGame;
-	static MODE				m_mode;
-	static CFade			*m_pFade;
-	static CEnemy			*m_pEnemy;
-	static CScore				*m_pScore;
-	static CButton			*m_pButton;
-	static CNumber			*m_pNumber;
-	static CSpeed			*m_pSpeed;
-	CInput* m_pInput;
+	static CRenderer		*m_pRenderer;				//レンダラーのポインタ
+	static CScene2D			*m_paScene[MAX_TEXTURE];	//シーンの配列ポインタ
+	static CInputKeyboard	*m_pInputKeyboard;			//キーボード入力のポインタ
+	static CMouse			*m_pMouse;					//マウスのポインタ
+	static CPlayer			*m_pPlayer;					//プレイヤーのポインタ
+	static CSound			*m_pSound;					//サウンドのポインタ
+	static CExplosion		*m_pExplosion;				//爆発のポインタ
+	static CBullet			*m_pBullet;					//弾のポインタ
+	static CTitle			*m_pTitle;					//タイトルのポインタ
+	static CResult			*m_pResult;					//リザルト画面のポインタ
+	static CGame			*m_pGame;					//ゲーム画面のポインタ
+	static CFade			*m_pFade;					//フェードのポインタ
+	static CEnemy			*m_pEnemy;					//敵のポインタ
+	static CScore			*m_pScore;					//スコアのポインタ
+	static CButton			*m_pButton;					//ボタンのポインタ
+	static CNumber			*m_pNumber;					//ナンバーのポインタ
+	static CSpeed			*m_pSpeed;					//スピードのポインタ
+	static MODE				m_mode;						//モードの情報
+	CInput					*m_pInput;					//入力のポインタ
 };
 #endif

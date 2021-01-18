@@ -14,6 +14,7 @@
 #include "renderer.h"
 #include "scene2d.h"
 #include "manager.h"
+
 //*****************************************************************************
 //爆発のクラス宣言
 //*****************************************************************************
@@ -24,13 +25,13 @@ public:
 	~CExplosion();				//デストラクタ
 
 	//メンバ関数
-	static CExplosion *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size);		//クリエイト関数
-	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 size);					//初期化関数
-	void Uninit(void);													//終了関数
-	void Update(void);													//更新関数
-	void Draw(void);													//描画関数
-	static HRESULT Load(void);											//ロード関数
-	static void UnLoad(void);											//アンロード関数
+	static CExplosion *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size);	//クリエイト関数
+	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 size);				//初期化関数
+	void Uninit(void);												//終了関数
+	void Update(void);												//更新関数
+	void Draw(void);												//描画関数
+	static HRESULT Load(void);										//ロード関数
+	static void UnLoad(void);										//アンロード関数
 
 
 private:

@@ -40,8 +40,8 @@ public:
 
 	}GAMESTATE;
 
-	CGame(int nPriority=2) ;				//コンストラクタ
-	~CGame();								//デストラクタ
+	CGame(int nPriority=2) ;												//コンストラクタ
+	~CGame();																//デストラクタ
 
 	//メンバ関数
 	static CGame *Create();													//クリエイト
