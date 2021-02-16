@@ -128,7 +128,14 @@ void CPlayer::Update(void)
 		m_pos.x += m_size.x / 2;
 	}
 	m_pInput = CManager::GetMouse();
-	if (((CMouse*)m_pInput)->GetMouseTrigger(0) == true )
+	if (((CMouse*)m_pInput)->GetMousePrees(1) == true)
+	{
+		posPoint.x = SCREEN_WIDTH / 2;
+		posPoint.y = SCREEN_HEIGHT / 2;
+		m_pos = D3DXVECTOR3((float)posPoint.x, (float)posPoint.y, 0.0f);	//ˆÊ’u
+	}
+
+	else if (((CMouse*)m_pInput)->GetMouseTrigger(0) == true )
 	{
 		if (CManager::GetMode() == CManager::MODE_GAME&&
 			GetObjType()==OBJTYPE_PLAYER&&

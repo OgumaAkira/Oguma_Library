@@ -20,6 +20,7 @@ class CEnemy;
 class CFade;
 class CScore;
 class CBulletUI;
+class CCombo;
 
 //*****************************************************************************
 //ゲーム画面のクラス宣言
@@ -53,9 +54,9 @@ public:
 	static void SetGameState(GAMESTATE state) {m_GameState = state;};		//ゲーム状態設定
 	static GAMESTATE GetGameState(void) { return m_GameState; }				//ゲーム状態取得
 	static int GetGameSpeed(void) { return m_GameSpeed; }					//ゲームスピード取得
+	static int GetEnemy(void) { return m_nNumEnemy; }						//敵の情報取得関数
 	D3DXVECTOR3 GetRandPos(void);											//敵の乱数配置位置取得関数
 	D3DXVECTOR3 GetRandMove(void);											//敵の乱数配置慣性取得関数
-	static int GetEnemy(void) { return m_nNumEnemy; }						//敵の情報取得関数
 private:
 	//メンバ変数
 	static GAMESTATE			m_GameState;			//状態
@@ -70,6 +71,7 @@ private:
 	static CSpeed				*m_pSpeed;				//スピードのポインタ
 	static CBulletUI			*m_pBulletUI;			//残弾のポインタ
 	static CBullet				*m_pBullet;				//弾のポインタ
+	static CCombo				*m_pCombo;				//コンボのポインタ
 	CSound						*pSound;				//サウンドのポインタ
 };
 #endif

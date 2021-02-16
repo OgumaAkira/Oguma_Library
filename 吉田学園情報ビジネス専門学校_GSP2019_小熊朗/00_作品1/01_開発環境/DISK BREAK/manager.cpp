@@ -29,6 +29,7 @@
 #include "titlelogo.h"		//タイトルロゴのヘッター
 #include "tutorial.h"		//チュートリアルのヘッター
 #include "hiscoreUI.h"		//ハイスコアのヘッター
+#include "combo.h"			//コンボのヘッター
 //*****************************************************************************
 //静的メンバ変数
 //*****************************************************************************
@@ -49,6 +50,7 @@ CFade			*CManager::m_pFade					= NULL;	//フェードのポインタ
 CNumber			*CManager::m_pNumber				= NULL;	//ナンバーのポインタ
 CScore			*CManager::m_pScore					= NULL;	//スコアのポインタ
 CSpeed			*CManager::m_pSpeed					= NULL;	//スピードアップのポインタ
+CCombo			*CManager::m_pCombo					= NULL;	//スピードアップのポインタ
 CManager::MODE	 CManager::m_mode					= CManager::MODE_TITLE;	//初期モード
 //*****************************************************************************
 // コンストラクタ

@@ -23,6 +23,7 @@
 #include "speed.h"
 #include "bulletUI.h"
 #include "fade.h"
+#include "combo.h"
 #include <time.h>
 
 //*****************************************************************************
@@ -35,6 +36,7 @@ CFade				*CGame::m_pFade = NULL;			//フェードのポインタ
 CScore				*CGame::m_pScore = NULL;		//スコアのポインタ
 CSpeed				*CGame::m_pSpeed = NULL;		//スピードアップのポインタ
 CBulletUI			*CGame::m_pBulletUI = NULL;		//残弾のポインタ
+CCombo				*CGame::m_pCombo = NULL;		//コンボのポインタ
 CGame::GAMESTATE	CGame::m_GameState = {};		//ゲーム状態
 int					CGame::m_nNumEnemy = 0;			//敵の数
 int					CGame::m_GameSpeed = 0;			//ゲームスピード
@@ -88,6 +90,7 @@ HRESULT CGame::Init()
 	m_pBulletUI = CBulletUI::Create();					//残弾の生成
 	m_pScore = CScore::Create();						//スコアの生成	
 	m_pFade = CFade::Create();							//フェードの生成
+	m_pCombo = CCombo::Create();						//コンボの生成
 
 	//敵の生成
 	m_pEnemy = CEnemy::Create(GetRandPos(), GetRandMove(),	
@@ -150,6 +153,7 @@ void CGame::Update(void)
 									D3DXVECTOR3(SPEEDUP_SIZE_X, SPEEDUP_SIZE_Y, 0));
 			m_pSpeed->CSpeed::SetbUse(true);		//スピードアップの点滅表示
 		}
+		m_pCombo->ComboAction();			//コンボアクション
 		break;
 
 	//スピードアップの状態の場合

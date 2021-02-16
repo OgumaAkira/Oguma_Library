@@ -34,6 +34,7 @@ class CEnemy;
 class CButton;
 class CNumber;
 class CSpeed;
+class CCombo;
 //*****************************************************************************
 //オブジェクト2クラス宣言
 //*****************************************************************************
@@ -68,6 +69,7 @@ public:
 	static CButton			*GetButton(void)		{ return m_pButton; }		//ボタン情報取得関数
 	static CScore			*GetScore(void)			{ return m_pScore; }		//スコア取得関数
 	static CFade			*GetFade(void)			{ return m_pFade; }			//フェード取得関数
+	static CCombo			*GetCombo(void)			{ return m_pCombo; }		//コンボ取得関数
 	static MODE				GetMode(void)			{ return m_mode; }			//モード情報取得関数
 	static void				SetMode(MODE mode);
 
@@ -90,6 +92,7 @@ private:
 	static CButton			*m_pButton;					//ボタンのポインタ
 	static CNumber			*m_pNumber;					//ナンバーのポインタ
 	static CSpeed			*m_pSpeed;					//スピードのポインタ
+	static CCombo			*m_pCombo;					//コンボのポインタ
 	static MODE				m_mode;						//モードの情報
 	CInput					*m_pInput;					//入力のポインタ
 };

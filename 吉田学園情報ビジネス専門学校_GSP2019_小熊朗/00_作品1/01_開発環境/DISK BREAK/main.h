@@ -74,12 +74,19 @@
 #define ENEMY_POSX (150.0f)//敵のXの長さ
 #define ENEMY_POSY (150.0f)//敵のYの長さ
 
-//ナンバーマクロ
+//スコアナンバーマクロ
 #define MAX_SCORE_NUMBER (10)		//スコアナンバーの最大数
 #define SCORE_POS_X (35)			//スコア一桁のXの位置
 #define SCORE_POS_Y (70)			//スコア一桁のYの位置
 #define SCORE_SIZE_X (35)			//スコア一桁のXの大きさ
 #define SCORE_SIZE_Y (70)			//スコア一桁のYの大きさ
+
+//スコアナンバーマクロ
+#define MAX_COMBO_NUMBER (2)		//スコアナンバーの最大数
+#define COMBO_POS_X (35)			//スコア一桁のXの位置
+#define COMBO_POS_Y (140)			//スコア一桁のYの位置
+#define COMBO_SIZE_X (35)			//スコア一桁のXの大きさ
+#define COMBO_SIZE_Y (70)			//スコア一桁のYの大きさ
 
 //スピードアップのマクロ
 #define SPEEDUP_POS_X (SCREEN_WIDTH / 2)			//スコア一桁のXの位置
@@ -88,9 +95,10 @@
 #define SPEEDUP_SIZE_Y (1000.0f)					//スコア一桁のYの大きさ
 
 //ウィンドウ用
-#define WindowVersion (1)
+#define WindowVersion (0)
+
 //フルスクリーン用
-#define FullScreenVersion (0)
+#define FullScreenVersion (1)
 
 //*****************************************************************************
 // 構造体定義

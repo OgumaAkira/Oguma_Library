@@ -26,6 +26,7 @@ class CEnemy;
 class CInput;
 class CButton;
 class BulletUI;
+class CCombo;
 
 //*****************************************************************************
 //’eƒNƒ‰ƒXéŒ¾
