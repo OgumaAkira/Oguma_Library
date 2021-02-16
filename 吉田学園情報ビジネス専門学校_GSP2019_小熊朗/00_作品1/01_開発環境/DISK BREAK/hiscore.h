@@ -21,6 +21,15 @@
 //*****************************************************************************
 class CHIScore :public CScene
 {
+	//構造体定義(種類)
+	typedef enum
+	{
+		HISCORETYPE_NONE = 0,		//何もない状態
+		HISCORETYPE_HISCORE,		//ハイスコア
+		HISCORETYPE_MYSCORE,		//自己スコア
+		HISCORETYPE_MAX				//最大数
+	}HISCORETYPE;
+
 public:
 	CHIScore();					//コンストラクタ
 	~CHIScore();				//デストラクタ
@@ -38,8 +47,6 @@ private:
 	//メンバ変数
 	D3DXVECTOR3				m_pos;								//ポリゴンの位置
 	D3DXVECTOR3				m_size;								//ポリゴン大きさ
-	int						m_nCounterAnim;						//アニメーションカウンター
-	int						m_nPatternAnim;						//アニメーションパターンNo.
 	CNumber					*m_apNumber[MAX_SCORE_NUMBER];		//シーン2Dのポインタ配列
 	static int				m_nScore;							//スコア
 };

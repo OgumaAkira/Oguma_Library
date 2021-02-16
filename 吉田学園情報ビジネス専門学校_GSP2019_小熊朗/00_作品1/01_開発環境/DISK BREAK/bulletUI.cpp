@@ -140,7 +140,6 @@ void CBulletUI::Update(void)
 			{
 				m_BulletCnt++;
  			}
-
 		}
 		if (m_BulletCnt == 5 && CGame::GetGameState() != (CGame::GAMESTATE_ENEMYBREAK) && CGame::GetGameState() != (CGame::GAMESTATE_SPEEDUP))
 		{

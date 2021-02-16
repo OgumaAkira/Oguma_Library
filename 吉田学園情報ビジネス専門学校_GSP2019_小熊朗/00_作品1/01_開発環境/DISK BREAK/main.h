@@ -95,10 +95,10 @@
 #define SPEEDUP_SIZE_Y (1000.0f)					//スコア一桁のYの大きさ
 
 //ウィンドウ用
-#define WindowVersion (0)
+#define WindowVersion (1)
 
 //フルスクリーン用
-#define FullScreenVersion (1)
+#define FullScreenVersion (0)
 
 //*****************************************************************************
 // 構造体定義

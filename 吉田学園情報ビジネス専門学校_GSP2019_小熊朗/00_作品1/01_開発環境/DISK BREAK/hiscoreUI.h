@@ -51,7 +51,6 @@ private:
 	D3DXVECTOR3						m_pos;						//位置
 	D3DXVECTOR3						m_size;						//大きさ
 	D3DXCOLOR						m_col;						//カラー
-	static int						m_nFrameCnt;				//フラッシュカウント
 	int								m_Cnt;						//カウント
 	static LPDIRECT3DTEXTURE9		m_pTexture[2];				//テクスチャの情報
 };

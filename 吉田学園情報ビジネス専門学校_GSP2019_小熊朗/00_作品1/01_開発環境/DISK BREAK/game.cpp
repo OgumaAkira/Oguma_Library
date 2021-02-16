@@ -40,6 +40,7 @@ CCombo				*CGame::m_pCombo = NULL;		//コンボのポインタ
 CGame::GAMESTATE	CGame::m_GameState = {};		//ゲーム状態
 int					CGame::m_nNumEnemy = 0;			//敵の数
 int					CGame::m_GameSpeed = 0;			//ゲームスピード
+
 //*****************************************************************************
 //コンストラクタ
 //*****************************************************************************
@@ -123,6 +124,7 @@ void CGame::Update(void)
 
 	m_pBg->Update();					//背景の更新
 	m_pFade->Update();					//フェードの更新
+	m_pCombo->ComboAction();			//コンボアクション
 
 	//ゲーム画面の状態
 	switch (m_GameState)
@@ -153,7 +155,7 @@ void CGame::Update(void)
 									D3DXVECTOR3(SPEEDUP_SIZE_X, SPEEDUP_SIZE_Y, 0));
 			m_pSpeed->CSpeed::SetbUse(true);		//スピードアップの点滅表示
 		}
-		m_pCombo->ComboAction();			//コンボアクション
+
 		break;
 
 	//スピードアップの状態の場合
@@ -176,7 +178,7 @@ void CGame::Update(void)
 	case GAMESTATE_ENEMYBREAK:
 		m_nNumEnemy++;								//敵をカウント
 		m_WholeEnemy++;								//スピードアップまでの敵をカウント
-		m_pScore->AddScore(100);					//敵を倒したときのスコア
+		m_pScore->AddScore(250);					//敵を倒したときのスコア
 		m_GameState = GAMESTATE_NORMAL;				//ゲームの状態を通常にする
 		break;
 

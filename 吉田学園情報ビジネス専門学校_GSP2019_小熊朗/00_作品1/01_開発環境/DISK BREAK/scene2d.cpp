@@ -229,13 +229,3 @@ D3DXCOLOR CScene2D::GetColor()
 {
 	return D3DXCOLOR(m_color);
 }
-
-
-
-
-
-
-
-
-
-

@@ -16,7 +16,6 @@
 #include "game.h"
 #include "number.h"
 #include "hiscore.h"
-#include "combo.h"
 
 //*****************************************************************************
 //スコアのクラス宣言
@@ -24,7 +23,6 @@
 class CScore :public CScene
 {
 public:
-
 	CScore(int nPriority = 7);						//コンストラクタ
 	~CScore();										//デストラクタ
 
@@ -38,13 +36,13 @@ public:
 	int ReadFile(void);									//読み込みファイル関数
 	void WriteFile(void);								//書き込みファイル関数
 	void SetScore(int nScore)	{ m_nScore = nScore; }	//スコア値格納関数
-	int GetScore(void)			{ return m_nScore; }	//スコア取得関数
+	static int GetScore(void)			{ return m_nScore; }	//スコア取得関数
 private:
 	//メンバ変数
 	D3DXVECTOR3				m_move;								//移動量
 	D3DXVECTOR3				m_pos;								// ポリゴンの位置
 	D3DXVECTOR3				m_size;								// ポリゴン大きさ
 	CNumber					*m_apNumber[MAX_SCORE_NUMBER];		//シーン2Dのポインタ配列
-	int						m_nScore;							//スコア
+	static int				m_nScore;							//スコア
 };
 #endif
