@@ -33,8 +33,12 @@ class CBullet;
 class CEnemy;
 class CButton;
 class CNumber;
-class CSpeed;
 class CCombo;
+class CSpeed;
+class CComboUI;
+class CUi;
+class CPause;
+
 //*****************************************************************************
 //オブジェクト2クラス宣言
 //*****************************************************************************
@@ -47,6 +51,7 @@ public:
 		MODE_TITLE = 0,
 		MODE_GAME,
 		MODE_RESULT,
+		MODE_PAUSE,
 		MODE_END
 	}MODE;
 
@@ -70,6 +75,9 @@ public:
 	static CScore			*GetScore(void)			{ return m_pScore; }		//スコア取得関数
 	static CFade			*GetFade(void)			{ return m_pFade; }			//フェード取得関数
 	static CCombo			*GetCombo(void)			{ return m_pCombo; }		//コンボ取得関数
+	static CSpeed			*GetSpeed(void)			{ return m_pSpeed; }		//スピードUI取得関数
+	static CUi				*GetUi(void)			{ return m_pUi; }			//UI取得関数
+	static CComboUI			*GetComboUI(void)		{ return m_pComboUI; }		//コンボUI取得関数
 	static MODE				GetMode(void)			{ return m_mode; }			//モード情報取得関数
 	static void				SetMode(MODE mode);
 
@@ -86,14 +94,18 @@ private:
 	static CTitle			*m_pTitle;					//タイトルのポインタ
 	static CResult			*m_pResult;					//リザルト画面のポインタ
 	static CGame			*m_pGame;					//ゲーム画面のポインタ
+	static CPause			*m_pPause;					//ポーズ画面のポインタ
 	static CFade			*m_pFade;					//フェードのポインタ
 	static CEnemy			*m_pEnemy;					//敵のポインタ
 	static CScore			*m_pScore;					//スコアのポインタ
 	static CButton			*m_pButton;					//ボタンのポインタ
 	static CNumber			*m_pNumber;					//ナンバーのポインタ
-	static CSpeed			*m_pSpeed;					//スピードのポインタ
 	static CCombo			*m_pCombo;					//コンボのポインタ
+	static CSpeed			*m_pSpeed;					//スピードUIのポインタ
+	static CUi				*m_pUi;						//UIの情報
+	static CComboUI			*m_pComboUI;				//コンボUIのポインタ
 	static MODE				m_mode;						//モードの情報
 	CInput					*m_pInput;					//入力のポインタ
+
 };
 #endif

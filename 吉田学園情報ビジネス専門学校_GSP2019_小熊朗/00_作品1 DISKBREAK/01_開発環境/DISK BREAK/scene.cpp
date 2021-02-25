@@ -96,6 +96,17 @@ void CScene::ReleaseAll(void)
 	}
 }
 
+void CScene::Select(int Priority)
+{
+	for (int nCntScene = 0; nCntScene < MAX_TEXTURE; nCntScene++)
+	{
+		if (m_apScene[Priority][nCntScene] != NULL)
+		{
+			m_apScene[Priority][nCntScene]->Release();
+		}
+	}
+}
+
 //*****************************************************************************
 // ÉäÉäÅ[ÉXèàóù
 //*****************************************************************************

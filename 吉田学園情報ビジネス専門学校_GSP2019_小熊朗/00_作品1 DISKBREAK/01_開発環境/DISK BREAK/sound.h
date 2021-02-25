@@ -40,7 +40,7 @@ public:
 	void UninitSound(void);					//I—¹ŠÖ”
 	HRESULT PlaySound(SOUND_LABEL label);	//Ä¶ŠÖ”
 	void StopSound(SOUND_LABEL label);		//’â~ŠÖ”
-	void StopSound(void);					//ˆê’â~ŠÖ”
+	void StopSoundTo(void);					//ˆê’â~ŠÖ”
 
 private:
 	//ƒƒ“ƒo•Ï”

@@ -47,11 +47,11 @@ public:
 
 private:
 	//メンバ変数
-	D3DXVECTOR3				m_move;							//移動量
-	D3DXVECTOR3				m_pos;							//ポリゴンの位置
-	D3DXVECTOR3				m_size;							//ポリゴン大きさ
-	static int				m_color;						//ポリゴンの色
-	bool					m_bUse;							//ONOFF
+	D3DXVECTOR3						m_move;							//移動量
+	D3DXVECTOR3						m_pos;							//ポリゴンの位置
+	D3DXVECTOR3						m_size;							//ポリゴン大きさ
+	static int						m_color;						//ポリゴンの色
+	bool							m_bSpeedFlash;							//ONOFF
 	static FADESTATE				m_FadeState;			//使用しているかどうか
 	static LPDIRECT3DTEXTURE9		m_pTexture;				//テクスチャの情報[テクスチャの数]
 	CScene2D						*m_pScene2D;			//シーン2Dのポインタ配列

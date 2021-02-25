@@ -17,8 +17,8 @@
 //*****************************************************************************
 //静的メンバ変数
 //*****************************************************************************
-LPDIRECT3DTEXTURE9	CBullet::m_pTexture = NULL;		//テクスチャの情報
-CBulletUI			*CBullet::m_pBulletUI = NULL;	//残弾のポインタ
+LPDIRECT3DTEXTURE9		CBullet::m_pTexture = NULL;		//テクスチャの情報
+CBulletUI				*CBullet::m_pBulletUI = NULL;	//残弾のポインタ
 
 //*****************************************************************************
 //コンストラクタ
@@ -123,16 +123,14 @@ void CBullet::Update(void)
 	//当たり判定
 	for (int nCntScene = 0; nCntScene < MAX_TEXTURE; nCntScene++)
 	{
-		//
-		bool bHitEnemy = false;
+		bool bHitEnemy = false;		//判定なし
 
 		for (int nCountPriority = 0; nCountPriority < PRIORITY_MAX; nCountPriority++)
 		{
 			CScene *pScene = GetScene(nCountPriority, nCntScene);
 			if (pScene != NULL)
 			{
-				OBJTYPE objType;
-				objType = pScene->GetObjType();
+				OBJTYPE objType = pScene->GetObjType();
 				//敵の当たり判定
 				if ((objType == OBJTYPE_ENEMY) && (m_type == BULLET_TYPE_PLAYER))
 				{
@@ -149,7 +147,7 @@ void CBullet::Update(void)
 					{
 						CEnemy *pEnemy = (CEnemy*)pScene;	//キャスト;
 						pEnemy->HitDamege(1);				//敵へのダメージを取得
-						bHitEnemy = true;
+						bHitEnemy = true;					//判定あり
 						break;
 					}
 				}
@@ -160,6 +158,7 @@ void CBullet::Update(void)
 					CScene2D *pScene2d = (CScene2D*)pScene;						//キャスト
 					D3DXVECTOR3 pos = pScene2d->GetPosition();					//位置
 					D3DXVECTOR3 size = pScene2d->GetSize();						//大きさ
+					
 					//ボタンの当たり判定
 					if (pos.x - size.x / 2 <= m_pos.x&&
 						pos.x + size.x / 2 >= m_pos.x&&
@@ -167,26 +166,27 @@ void CBullet::Update(void)
 						pos.y + size.y / 2 >= m_pos.y)
 					{
 						CButton *pButton = (CButton*)pScene;	//キャスト;
-						pButton->SetButton();
+						pButton->SetButton();					//ボタン情報格納関数
 					}
 				}
 			}
 		}
-		//敵を当てたとき
+		//判定ありのとき
 		if (bHitEnemy == true)
 		{ 
 			break;
 		}
 	}
+	//弾が消えるとき
 	if (m_nHP <= 0)
 	{
-		//爆発生成
+		//タイプがプレイヤーの弾であれば
 		if (m_type == BULLET_TYPE_PLAYER)
 		{
-			CExplosion::Create(m_pos, m_size);
-			m_pBulletUI->SetbUse();
+			CExplosion::Create(m_pos, m_size);	//爆発生成
+			m_pBulletUI->SetbUse();				//点滅スイッチ情報格納関数
 		}
-		Uninit();
+		Uninit();								//終了関数
 	}
 }
 

@@ -15,10 +15,9 @@ class CFade;
 class CPlayer;
 class CButton;
 class CSound;
-class CTitleLogo;
 class CTutorial;
 class CHIScore;
-class CHiScoreUI;
+class CUi;
 
 //*****************************************************************************
 //タイトル画面のクラス宣言
@@ -42,12 +41,10 @@ private:
 	static CFade			*m_pFade;		//フェードのポインタ
 	static CPlayer			*m_pPlayer;		//プレイヤーのポインタ
 	static CButton			*m_pButton;		//ボタンのポインタ
-	static CTitleLogo		*m_pTitileLogo;	//タイトルロゴのポインタ
-	static CTutorial		*m_pTutorial;	//チュートリアルのポインタ
 	static CHIScore			*m_pHiScore;	//ハイスコアのポインタ
-	static CHiScoreUI		*m_pHiScoreUI;	//ハイスコアUIのポインタ
-	bool					bUse;			//スイッチ
+	static CUi				*m_pUi;			//UIのポインタ
 	CSound					*pSound;		//サウンドのポインタ
 	CInput					*m_pInput;		//入力のポインタ
+	bool					m_bButton;			//スイッチ
 };
 #endif

@@ -73,7 +73,7 @@ HRESULT CScore::Init()
 			//ÉQÅ[ÉÄâÊñ ÇÃèÍçá
 			case CManager::MODE_GAME:
 				m_apNumber[nCntInit] = CNumber::Create(
-					D3DXVECTOR3((float)(0 + (SCORE_SIZE_X / 2) + (SCORE_SIZE_X *nCntInit)), SCORE_POS_Y, 0),
+					D3DXVECTOR3((float)(SCOREUI_SIZEX + 5 + (SCORE_SIZE_X / 2) + (SCORE_SIZE_X *nCntInit)), SCORE_POS_Y, 0),
 					D3DXVECTOR3(SCORE_SIZE_X, SCORE_SIZE_Y, 0), 0);
 				break;
 			case CManager::MODE_RESULT:
@@ -81,6 +81,7 @@ HRESULT CScore::Init()
 					(float)(SCREEN_WIDTH / 2 + (SCORE_SIZE_X / 2)*2 + (SCORE_SIZE_X *nCntInit)*2), SCREEN_HEIGHT/2, 0),
 					D3DXVECTOR3(SCORE_SIZE_X*2, SCORE_SIZE_Y*2, 0), 0);
 				break;
+
 			default:
 				break;
 			}

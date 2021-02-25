@@ -32,6 +32,7 @@ public:
 		OBJTYPE_TITLE,		//タイトル画面
 		OBJTYPE_GAME,		//ゲーム画面
 		OBJTYPE_RESULT,		//リザルト画面
+		OBJTYPE_PAUSE,		//ポーズ画面
 		OBJTYPE_MAX			//最大数
 	}OBJTYPE;
 
@@ -51,7 +52,7 @@ public:
 	static void UpdateAll(void);																//更新関数
 	static void DrawAll(void);																	//描画関数
 	static void ReleaseAll(void);																//終了関数
-
+	static void	Select(int Priority);
 protected:
 	void Release(void);																			//終了関数
 

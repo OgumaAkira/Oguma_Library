@@ -20,26 +20,18 @@
 #include "score.h"
 #include "sound.h"
 #include "number.h"
-#include "speed.h"
+#include "ui.h"
 #include "bulletUI.h"
 #include "fade.h"
 #include "combo.h"
+#include "comboUI.h"
+#include "speed.h"
 #include <time.h>
 
 //*****************************************************************************
 //静的メンバ変数
 //*****************************************************************************
-CPlayer				*CGame::m_pPlayer = NULL;		//プレイヤーのポインタ
-CBg					*CGame::m_pBg = NULL;			//背景のポインタ
-CEnemy				*CGame::m_pEnemy = NULL;		//エネミーのポインタ
-CFade				*CGame::m_pFade = NULL;			//フェードのポインタ
-CScore				*CGame::m_pScore = NULL;		//スコアのポインタ
-CSpeed				*CGame::m_pSpeed = NULL;		//スピードアップのポインタ
-CBulletUI			*CGame::m_pBulletUI = NULL;		//残弾のポインタ
-CCombo				*CGame::m_pCombo = NULL;		//コンボのポインタ
 CGame::GAMESTATE	CGame::m_GameState = {};		//ゲーム状態
-int					CGame::m_nNumEnemy = 0;			//敵の数
-int					CGame::m_GameSpeed = 0;			//ゲームスピード
 
 //*****************************************************************************
 //コンストラクタ
@@ -80,8 +72,10 @@ HRESULT CGame::Init()
 {
 	
 	srand((unsigned int)time(NULL));					//乱数の初期化
-	pSound = CManager::GetSound();						//サウンドの情報を取得
-	pSound->PlaySound(CSound::SOUND_LABEL_GAMEBGM);		//ゲームBGMを流す
+	m_pSound = CManager::GetSound();						//サウンドの情報を取得
+#if DEBUG_SOUND
+	m_pSound->PlaySound(CSound::SOUND_LABEL_GAMEBGM);		//ゲームBGMを流す
+#endif // DEBUG_SOUND
 	m_GameState = GAMESTATE_NORMAL;						//ゲーム画面の状態は通常状態
 	m_nNumEnemy = 0;									//画面に現れる敵のカウント
 	m_WholeEnemy = 0;									//スピードアップまでの敵のカウント
@@ -103,8 +97,16 @@ HRESULT CGame::Init()
 	
 	//ターゲットマーカーの生成
 	m_pPlayer = CPlayer::Create(D3DXVECTOR3((float)posPoint.x, (float)posPoint.y, 0.0f),
-								D3DXVECTOR3(PLAYER_SIZEX, PLAYER_SIZEY, 0),	
-								OBJTYPE_PLAYER);
+								D3DXVECTOR3(PLAYER_SIZEX, PLAYER_SIZEY, 0));
+
+	//UIの生成
+	m_pUi -> Create(D3DXVECTOR3(SCOREUI_POSX, SCOREUI_POSY,0),
+					D3DXVECTOR3(SCOREUI_SIZEX, SCOREUI_SIZEY, 0),
+					CUi::UITYPE_SCORE);
+
+	//スコアUIの生成
+	m_pComboUI->Create(D3DXVECTOR3(COMBOUI_POSX, COMBOUI_POSY, 0),
+						D3DXVECTOR3(COMBOUI_SIZEX, COMBOUI_SIZEY, 0));
 	return S_OK;
 }
 
@@ -135,6 +137,7 @@ void CGame::Update(void)
 		if (m_nNumEnemy >= 2 && m_WholeEnemy != 10)
 		{
 			m_nNumEnemy = 0;						//画面上の敵の数をリセット
+
 			//エネミーの生成
 			m_pEnemy = CEnemy::Create(GetRandPos(), GetRandMove(), 
 									D3DXVECTOR3(ENEMY_SIZEX, ENEMY_SIZEY, 0), 
@@ -151,9 +154,9 @@ void CGame::Update(void)
 			m_GameState = GAMESTATE_SPEEDUP;		//ゲーム画面の状態をスピードアップにする
 			m_pScore->AddScore(2500);				//2500点のスコアボーナスを加点する
 			//スピードアップのUIを表示
-			m_pSpeed = CSpeed::Create(D3DXVECTOR3(SPEEDUP_POS_X, SPEEDUP_POS_Y, 0), 
+			m_pSpeedUI = CSpeed::Create(D3DXVECTOR3(SPEEDUP_POS_X, SPEEDUP_POS_Y, 0), 
 									D3DXVECTOR3(SPEEDUP_SIZE_X, SPEEDUP_SIZE_Y, 0));
-			m_pSpeed->CSpeed::SetbUse(true);		//スピードアップの点滅表示
+			m_pSpeedUI->CSpeed::SetbUse(true);		//スピードアップの点滅表示
 		}
 
 		break;
@@ -161,12 +164,12 @@ void CGame::Update(void)
 	//スピードアップの状態の場合
 	case GAMESTATE_SPEEDUP:
 		//スピードアップのUI点滅オン
-		if (m_pSpeed->GetbUse() == true)
+		if (m_pSpeedUI->GetbUse() == true)
 		{
-				m_pSpeed->CSpeed::Update();
+			m_pSpeedUI->CSpeed::Update();			//スピードUIの更新処理
 		}
 		//スピードアップのUI点滅オフ
-		else if (m_pSpeed->GetbUse() == false)
+		else if (m_pSpeedUI->GetbUse() == false)
 		{
 			m_GameState = GAMESTATE_NORMAL;			//通常状態にする
 			m_GameSpeed += 5;						//敵のスピードアップ
@@ -178,7 +181,7 @@ void CGame::Update(void)
 	case GAMESTATE_ENEMYBREAK:
 		m_nNumEnemy++;								//敵をカウント
 		m_WholeEnemy++;								//スピードアップまでの敵をカウント
-		m_pScore->AddScore(250);					//敵を倒したときのスコア
+		m_pScore->AddScore(200);					//敵を倒したときのスコア
 		m_GameState = GAMESTATE_NORMAL;				//ゲームの状態を通常にする
 		break;
 
@@ -192,7 +195,10 @@ void CGame::Update(void)
 		//フェードの状態をNONEにする
 		if (CFade::GetFade() == (CFade::FADESTATE_NONE))
 		{
-			pSound->StopSound(CSound::SOUND_LABEL_GAMEBGM);			//サウンドを止める
+			#if DEBUG_SOUND
+			//サウンド停止
+			m_pSound->StopSound(CSound::SOUND_LABEL_GAMEBGM);			//サウンドを止める
+			#endif // DEBUG_SOUND
 			CManager::SetMode(CManager::MODE_RESULT);				//ゲーム画面からリザルト画面に遷移する
 		}
 		break;
@@ -222,11 +228,10 @@ D3DXVECTOR3 CGame::GetRandPos(void)
 	float fPosY = 0.0f;
 
 	// Randomな値を得る
-	fPosX = (SCREEN_WIDTH / 2) + ((float)(rand() % 100000) 
-				/100.0f - (float)(rand() % 100000) / 100.0f);
+	fPosX = (SCREEN_WIDTH / 2) + ((float)(rand() % 1000000) 
+				/100.0f - (float)(rand() % 1000000) / 100.0f);
 	fPosY = (SCREEN_HEIGHT / 2) + ((float)(rand() % 50000) 
 				/ 100.0f - (float)(rand() % 50000) / 100.0f);
-
 	
 	returnPos = D3DXVECTOR3(fPosX, fPosY, 0.0f);		// 返す位置に結び付ける
 

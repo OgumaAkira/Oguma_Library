@@ -17,19 +17,34 @@
 #include "game.h"
 
 //*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+#define MAX_BG_TEXTURE (3)
+
+//*****************************************************************************
 //背景クラス宣言
 //*****************************************************************************
 class CBg :public CScene
 {
 public:
 
+	//構造体定義(種類)
+	typedef enum
+	{
+		BGTYPE_SPACE1=0,	//宇宙背景1
+		BGTYPE_SPACE2,		//宇宙背景2
+		BGTYPE_SPACE3,		//宇宙背景3
+		BGTYPE_MAX			//最大数
+	}BGTYPE;
+
+
 	CBg(int nPriority = 1);									//コンストラクタ
 	~CBg();													//デストラクタ
 
 	//メンバ関数
+	static CBg *Create();
 	static HRESULT Load(void);								//ロード関数
 	static void UnLoad(void);								//テクスチャの破棄
-	static CBg *Create();
 
 	HRESULT Init();											//初期化処理
 	void Uninit(void);										//終了処理
@@ -44,8 +59,8 @@ private:
 	int						m_nCounterAnim;					//アニメーションカウンター
 	int						m_nPatternAnim;					//アニメーションパターンNo.
 
-	static LPDIRECT3DTEXTURE9		m_pTexture[3];			//テクスチャの情報[テクスチャの数]
-	CScene2D						*m_apScene2D[3];		//シーン2Dのポインタ配列
+	static LPDIRECT3DTEXTURE9		m_pTexture[MAX_BG_TEXTURE];			//テクスチャの情報[テクスチャの数]
+	CScene2D						*m_apScene2D[MAX_BG_TEXTURE];		//シーン2Dのポインタ配列
 
 };
 #endif

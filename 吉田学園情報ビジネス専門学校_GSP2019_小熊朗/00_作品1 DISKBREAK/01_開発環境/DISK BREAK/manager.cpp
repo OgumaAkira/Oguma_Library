@@ -23,13 +23,14 @@
 #include "title.h"			//タイトル画面のヘッター
 #include "game.h"			//ゲーム画面のヘッター
 #include "result.h"			//リザルト画面のヘッター
-#include "speed.h"			//速度上昇のヘッター
+#include "pause.h"			//ポーズ画面のヘッダー
 #include "fade.h"			//フェードのヘッター
 #include "bulletUI.h"		//残弾のヘッター
-#include "titlelogo.h"		//タイトルロゴのヘッター
-#include "tutorial.h"		//チュートリアルのヘッター
-#include "hiscoreUI.h"		//ハイスコアのヘッター
+#include "speed.h"			//スピードUIのヘッダー
+#include "ui.h"				//UIのヘッター
 #include "combo.h"			//コンボのヘッター
+#include "comboUI.h"		//コンボUIのヘッター
+
 //*****************************************************************************
 //静的メンバ変数
 //*****************************************************************************
@@ -46,11 +47,14 @@ CButton			*CManager::m_pButton				= NULL; //ボタンのポインタ
 CTitle			*CManager::m_pTitle					= NULL;	//タイトルのポインタ
 CGame			*CManager::m_pGame					= NULL;	//ゲームのポインタ
 CResult			*CManager::m_pResult				= NULL;	//バレットのポインタ
+CPause			*CManager::m_pPause					= NULL;	//ポーズのポインタ
 CFade			*CManager::m_pFade					= NULL;	//フェードのポインタ
 CNumber			*CManager::m_pNumber				= NULL;	//ナンバーのポインタ
 CScore			*CManager::m_pScore					= NULL;	//スコアのポインタ
-CSpeed			*CManager::m_pSpeed					= NULL;	//スピードアップのポインタ
-CCombo			*CManager::m_pCombo					= NULL;	//スピードアップのポインタ
+CCombo			*CManager::m_pCombo					= NULL;	//コンボのポインタ
+CSpeed			*CManager::m_pSpeed					= NULL;	//スピードUIのポインタ
+CUi				*CManager::m_pUi					= NULL;	//UIのポインタ
+CComboUI		*CManager::m_pComboUI				= NULL;	//コンボUIのポインタ
 CManager::MODE	 CManager::m_mode					= CManager::MODE_TITLE;	//初期モード
 //*****************************************************************************
 // コンストラクタ
@@ -88,6 +92,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bMenu)
 	//サウンドの生成
 	m_pSound = new CSound;
 	m_pSound->InitSound(hWnd);
+	//ターゲットマーカーの生成
 
 	//プレイヤーのテクスチャロード
 	CPlayer::Load();
@@ -107,9 +112,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bMenu)
 	//ナンバーのロード
 	CNumber::Load();
 
-	//スピードアップのロード
-	CSpeed::Load();
-
 	//背景のテクスチャロード
 	CBg::Load();
 
@@ -119,14 +121,14 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bMenu)
 	//フェードのテクスチャロード
 	CFade::Load();
 
-	//フェードのテクスチャロード
-	CTutorial::Load();
+	//スピードUIのポインタ
+	CSpeed::Load();
 
-	//タイトルロゴのテクスチャロード
-	CTitleLogo::Load();
+	//コンボUIのテクスチャロード
+	CComboUI::Load();
 
-	//タイトルロゴのテクスチャロード
-	CHiScoreUI::Load();
+	//UIのテクスチャロード
+	CUi::Load();
 
 	//モードの情報を格納する
 	SetMode(m_mode);
@@ -153,32 +155,29 @@ void CManager::Uninit(void)
 	//爆発のアンロード
 	CExplosion::UnLoad();
 
-	//ボタンのテクスチャロード
+	//ボタンのアンロード
 	CButton::UnLoad();
 
 	//ナンバーのロード
 	CNumber::UnLoad();
 
-	//スピードアップのロード
-	CSpeed::UnLoad();
-
-	//背景のテクスチャロード
+	//背景のアンロード
 	CBg::UnLoad();
 
-	//残弾のテクスチャロード
+	//残弾のアンロード
 	CBulletUI::UnLoad();
 
 	//フェードのアンロード
 	CFade::UnLoad();
 
-	//タイトルロゴのアンロード
-	CTitleLogo::UnLoad();
+	//スピードUIのアンロード
+	CSpeed::UnLoad();
 
-	//ハイスコアのテクスチャロード
-	CHiScoreUI::UnLoad();
+	//コンボUIのアンロード
+	CComboUI::UnLoad();
 
-	//フェードのテクスチャロード
-	CTutorial::UnLoad();
+	//UIのアンロード
+	CUi::UnLoad();
 
 	//キーボード入力破棄
 	if (m_pInputKeyboard != NULL)
@@ -196,12 +195,18 @@ void CManager::Uninit(void)
 		m_pMouse = NULL;
 	}
 
+	//サウンド破棄
+	//if (m_pSound != NULL)
+	//{
+	//	m_pSound->StopSoundTo();
+	//	delete m_pSound;
+	//	m_pSound = NULL;
+	//}
 	//レンダラー破棄
 	if (m_pRenderer != NULL)
 	{
 		m_pRenderer->Uninit();
 	}
-	
 }
 
 //*****************************************************************************
@@ -243,6 +248,16 @@ void CManager::Update(void)
 			m_pGame->CGame::Update();
 		}
 		break;
+
+		//ポーズ画面
+	case MODE_PAUSE:
+		//ポーズ画面を出す
+		if (m_pPause != NULL)
+		{
+			m_pPause->CPause::Update();
+		}
+		break;
+
 		//リザルト画面
 	case MODE_RESULT:
 		if (m_pResult != NULL)
@@ -274,7 +289,6 @@ void CManager::SetMode(MODE mode)
 {
 	m_mode = mode;	//モードの値を格納
 
-	//モード遷移
 	switch (m_mode)
 	{
 		//タイトル画面遷移
@@ -282,16 +296,26 @@ void CManager::SetMode(MODE mode)
 		//リザルト画面を初期化
 		if (m_pResult != NULL)	
 		{
-			m_pResult->CResult::Uninit();
+			m_pResult->CResult::Uninit();	
 			CScene::ReleaseAll();
 			m_pResult = NULL;
+		}
+		if (m_pGame != NULL)
+		{
+			m_pPause->CPause::Uninit();
+			m_pGame->CGame::Uninit();
+			CScene::ReleaseAll();
+			m_pGame = NULL; 
+			m_pPause = NULL;
 		}
 		//タイトル画面を出す
 		if (m_pTitle == NULL)
 		{
 			m_pTitle = CTitle::Create();
+			//モード遷移
 		}
 		break;
+		
 		//ゲーム画面遷移
 	case MODE_GAME:
 		//タイトル画面を初期化
@@ -306,15 +330,33 @@ void CManager::SetMode(MODE mode)
 		{
 			m_pGame = CGame::Create();
 		}
+		if (m_pPause != NULL)
+		{
+			m_pPause->CPause::Uninit();
+			CScene::Select(6);
+			m_pPause = NULL;
+		}
 		break;
+
+		//ポーズ画面遷移
+	case MODE_PAUSE:
+		//ポーズ画面を出す
+		if (m_pPause == NULL)
+		{
+			m_pPause = CPause::Create();
+		}
+		break;
+
 		//リザルト画面遷移
 	case MODE_RESULT:
 		//ゲーム画面を初期化
 		if (m_pGame != NULL)
 		{
 			m_pGame->CGame::Uninit();
+			m_pPause->CPause::Uninit();
 			CScene::ReleaseAll();
 			m_pGame = NULL;
+			m_pPause = NULL;
 		}
 		//リザルト画面を出す
 		if (m_pResult == NULL)

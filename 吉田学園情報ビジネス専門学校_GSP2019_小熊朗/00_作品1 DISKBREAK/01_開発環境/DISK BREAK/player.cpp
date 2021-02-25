@@ -17,8 +17,10 @@ LPDIRECT3DTEXTURE9	CPlayer::m_pTexture = NULL;		//テクスチャの情報
 //*****************************************************************************
 CPlayer::CPlayer(int nPriority) :CScene2D(nPriority)
 {
-	m_pos = D3DXVECTOR3(0, 0, 0);			// ポリゴンの位置
-	m_size = D3DXVECTOR3(0, 0, 0);			// ポリゴン大きさ
+	m_pos = D3DXVECTOR3(0, 0, 0);				// ポリゴンの位置
+	m_size = D3DXVECTOR3(0, 0, 0);				// ポリゴン大きさ
+	m_nColor = 0;								// ポリゴンの色
+
 }
 
 //*****************************************************************************
@@ -60,14 +62,14 @@ void CPlayer::UnLoad(void)
 //*****************************************************************************
 //クリエイト関数
 //*****************************************************************************
-CPlayer * CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, OBJTYPE objtype)
+CPlayer * CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 {
 	CPlayer *pPlayer = NULL;
 	//プレイヤーのポインタが何も無かった場合
 	if (pPlayer == NULL)
 	{
 		pPlayer = new CPlayer;
-		pPlayer->Init(pos, size,objtype);
+		pPlayer->Init(pos, size);
 	}
 		return pPlayer;
 }
@@ -75,14 +77,15 @@ CPlayer * CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, OBJTYPE objtype)
 //*****************************************************************************
 //初期化関数
 //*****************************************************************************
-HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size,OBJTYPE objtype)
+HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 {
 	CScene2D::Init();
 	m_pos = D3DXVECTOR3(pos.x,pos.y , 0);		//位置
 	SetPosition(m_pos);
 	m_size = D3DXVECTOR3(size.x, size.y, 0);	//大きさ
 	SetSize(m_size);
-	SetObjType(objtype);						//オブジェクト指定格納
+	m_nColor = 255;
+	SetObjType(OBJTYPE_CURSOR);						//オブジェクト指定格納
 	BirdTexture(m_pTexture);					//テクスチャの情報をscene2dに持ってく
 	return S_OK;;
 }
@@ -100,61 +103,52 @@ void CPlayer::Uninit(void)
 //*****************************************************************************
 void CPlayer::Update(void)
 {
+
 	POINT posPoint;
 	GetCursorPos(&posPoint);											//マウス座標を取得する
 	m_pos = D3DXVECTOR3((float)posPoint.x, (float)posPoint.y, 0.0f);	//位置
+	Range();															//移動範囲
 	m_pInput = CManager::GetMouse();									//マウスの入力情報取得
 	CSound *pSound = CManager::GetSound();								//サウンド情報取得
 	CScene2D::Update();													//オブジェクトの更新処理の取得
-
-	//-Y軸
-	if (m_pos.y - (m_size.y / 2) < 10)
+	MarkerColor();														//マーカーの色変え
+	MarkerObject();														//マーカーのオブジェクト切り替え
+	
+	//ホイールボタンを入力した場合
+	if (((CMouse*)m_pInput)->GetMousePrees(2) == true)
 	{
-		m_pos.y -= m_size.y / 2;
+		m_pos.x = SCREEN_WIDTH / 2;
+		m_pos.y = SCREEN_HEIGHT / 2;
 	}
-	//+Y軸
-	if (m_pos.y + (m_size.y / 2) > SCREEN_HEIGHT - 10)
+	//右クリックを入力し、かつゲーム画面だった場合
+	if (((CMouse*)m_pInput)->GetMousePrees(1) == true&&
+		CManager::GetMode()==CManager::MODE_GAME)
 	{
-		m_pos.y += m_size.y / 2;
+		CManager::SetMode(CManager::MODE_PAUSE);
 	}
-	//-X軸
-	if (m_pos.x - (m_size.x / 2) < 10)
-	{
-		m_pos.x -= m_size.x / 2;
-	}
-	//+X軸
-	if (m_pos.x + (m_size.x / 2) > SCREEN_WIDTH - 10)
-	{
-		m_pos.x += m_size.x / 2;
-	}
-	m_pInput = CManager::GetMouse();
-	if (((CMouse*)m_pInput)->GetMousePrees(1) == true)
-	{
-		posPoint.x = SCREEN_WIDTH / 2;
-		posPoint.y = SCREEN_HEIGHT / 2;
-		m_pos = D3DXVECTOR3((float)posPoint.x, (float)posPoint.y, 0.0f);	//位置
-	}
-
+	//左クリックを入力したと場合
 	else if (((CMouse*)m_pInput)->GetMouseTrigger(0) == true )
 	{
+		//ゲーム画面かつオブジェクトがプレイヤーかつフェード値が最大である場合
 		if (CManager::GetMode() == CManager::MODE_GAME&&
 			GetObjType()==OBJTYPE_PLAYER&&
 			CFade::GetFade() == CFade::FADESTATE_MAX)
 		{
 			//弾の生成
-			CBullet::Create(D3DXVECTOR3((float)posPoint.x, (float)posPoint.y, 0), 
+			CBullet::Create(D3DXVECTOR3((float)m_pos.x, (float)m_pos.y, 0),
 							D3DXVECTOR3(BULLET_SIZEX, BULLET_SIZEY, 0), 
 							D3DXVECTOR3(0, 0, 0), CBullet::BULLET_TYPE_PLAYER);
 
 			//サウンド
 			pSound->PlaySound(CSound::SOUND_LABEL_SE_SHOT);
 		}
+		//ゲーム画面以外でオブジェクトがカーソルかつフェード値が最大である場合
 		else if(CManager::GetMode() != CManager::MODE_GAME&&
 				GetObjType() == OBJTYPE_CURSOR&&
 				CFade::GetFade()==CFade::FADESTATE_MAX)
 		{
 			//弾の生成
-			CBullet::Create(D3DXVECTOR3((float)posPoint.x, (float)posPoint.y, 0), 
+			CBullet::Create(D3DXVECTOR3((float)m_pos.x, (float)m_pos.y, 0),
 							D3DXVECTOR3(BULLET_SIZEX, BULLET_SIZEY, 0), 
 							D3DXVECTOR3(0, 0, 0), CBullet::BULLET_TYPE_CURSOR);
 		}
@@ -172,4 +166,124 @@ void CPlayer::Draw(void)
 	CScene2D::Draw();
 }
 
+//*****************************************************************************
+//マーカーカラー関数
+//*****************************************************************************
+void CPlayer::MarkerColor(void)
+{
+	for (int nCntScene = 0; nCntScene < MAX_TEXTURE; nCntScene++)
+	{
+		//判定なし
+		bool bHit = false;
+		for (int nCountPriority = 0; nCountPriority < PRIORITY_MAX; nCountPriority++)
+		{
+			//シーンの情報取得
+			CScene *pScene = GetScene(nCountPriority, nCntScene);
+			//シーンに情報が入ってる場合
+			if (pScene != NULL)
+			{
+				//オブジェクトの情報取得
+				OBJTYPE objType = pScene->GetObjType();
+
+				//敵の当たり判定
+				if (objType == OBJTYPE_ENEMY
+					&& CManager::GetMode() == CManager::MODE_GAME
+					&& CGame::GetGameState() == CGame::GAMESTATE_NORMAL)
+				{
+					CEnemy *pEnemy = CManager::GetEnemy();						//敵の情報を取得
+					CScene2D *pScene2d = (CScene2D*)pScene;						//キャスト
+					D3DXVECTOR3 pos = pScene2d->GetPosition();					//位置を取得
+					D3DXVECTOR3 size = pScene2d->GetSize();						//大きさを取得
+
+					//敵と照準があった時
+					if (pos.x - size.x / 2 <= m_pos.x&&
+						pos.x + size.x / 2 >= m_pos.x&&
+						pos.y - size.y / 2 <= m_pos.y&&
+						pos.y + size.y / 2 >= m_pos.y)
+					{
+						SetColor(D3DCOLOR_RGBA(255, 0, 0, 255));				//色を赤に変化
+						bHit = true;											//判定あり
+					}
+					else
+					{
+						//元の色に戻す
+						SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+					}
+				}
+				//ボタンの当たり判定
+				if (objType == OBJTYPE_BUTTON && CManager::GetMode() == CManager::MODE_PAUSE)
+				{
+					CButton *pButton = CManager::GetButton();					//敵の情報を取得
+					CScene2D *pScene2d = (CScene2D*)pScene;						//キャスト
+					D3DXVECTOR3 pos = pScene2d->GetPosition();					//位置を取得
+					D3DXVECTOR3 size = pScene2d->GetSize();						//大きさを取得
+
+					//ボタンと照準があった時
+					if (pos.x - size.x / 2 <= m_pos.x&&
+						pos.x + size.x / 2 >= m_pos.x&&
+						pos.y - size.y / 2 <= m_pos.y&&
+						pos.y + size.y / 2 >= m_pos.y)
+					{
+						SetColor(D3DCOLOR_RGBA(255, 0, 0, 255));				//色を赤に変化
+						bHit = true;											//判定あり
+					}
+					else
+					{
+						//元の色に戻す
+						SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+					}
+				}
+			}
+		}
+		//敵と照準があった時
+		if (bHit == true)
+		{
+			break;
+		}
+	}
+}
+
+//*****************************************************************************
+//移動制限関数
+//*****************************************************************************
+void CPlayer::Range(void)
+{
+	//上の範囲
+	if (m_pos.y - (m_size.y / 2) <= 0)
+	{
+		m_pos.y += 90;
+	}
+	//下の範囲
+	if (m_pos.y + (m_size.y / 2) >= SCREEN_HEIGHT)
+	{
+		m_pos.y -= 90;
+	}
+	//右の範囲
+	if (m_pos.x - (m_size.x ) <= 0)
+	{
+		m_pos.x += 90;
+	}
+	//左の範囲
+	if (m_pos.x + (m_size.x / 2) >= SCREEN_WIDTH)
+	{
+		m_pos.x -= 90;
+	}
+}
+
+//*****************************************************************************
+//オブジェクト指定関数
+//*****************************************************************************
+void CPlayer::MarkerObject(void)
+{
+	//ゲーム画面の場合
+	if (CManager::GetMode() == CManager::MODE_GAME)
+	{
+		SetObjType(OBJTYPE_PLAYER);		//プレイヤーを格納
+	}
+	//それ以外の場合
+	else
+	{
+		SetObjType(OBJTYPE_CURSOR);		//カーソルを格納
+	}
+}
 

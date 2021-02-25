@@ -29,7 +29,7 @@ class CCombo :public CScene
 {
 public:
 
-	CCombo(int nPriority = 6);							//コンストラクタ
+	CCombo(int nPriority = 7);							//コンストラクタ
 	~CCombo();											//デストラクタ
 
 	//メンバ関数
@@ -47,9 +47,9 @@ private:
 	D3DXVECTOR3				m_size;								//ポリゴン大きさ
 	CNumber					*m_apNumber[MAX_SCORE_NUMBER];		//シーン2Dのポインタ配列
 	CScore					*m_pScore;							//スコアのポインタ
+	int						m_nColor;							//色数値
 	int						m_nCombo;							//コンボ数
 	int						m_nComboScore;						//コンボのスコア値
-	bool					m_bCombo;							//コンボ判定
 	int						m_nComboCountFrame;					//コンボ表示のフレーム数
 };
 #endif

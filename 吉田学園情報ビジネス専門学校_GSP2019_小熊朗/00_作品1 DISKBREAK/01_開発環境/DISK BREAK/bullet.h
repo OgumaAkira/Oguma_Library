@@ -55,14 +55,13 @@ public:
 	void Draw(void);																				//描画関数
 	static HRESULT Load(void);																		//ロード関数
 	static void UnLoad(void);																		//アンロード関数
-
 private:
 	//メンバ変数
 	D3DXVECTOR3						m_move;			//移動量
 	D3DXVECTOR3						m_pos;			//ポリゴンの位置
 	D3DXVECTOR3						m_size;			//ポリゴンのサイズ
-	BULLET_TYPE						m_type;			//種類
 	int								m_nHP;			//ヒットポイント
+	BULLET_TYPE						m_type;			//種類
 	static LPDIRECT3DTEXTURE9		m_pTexture;		//テクスチャの情報
 	static CBulletUI				*m_pBulletUI;	//弾UIのポイント
 };

@@ -13,8 +13,8 @@
 //*****************************************************************************
 //静的メンバ変数
 //*****************************************************************************
-LPDIRECT3DTEXTURE9	CBulletUI::m_pTexture = {};		//テクスチャの情報
-bool				CBulletUI::m_bUse = false;		//残弾表示スイッチ
+LPDIRECT3DTEXTURE9	CBulletUI::m_pTexture = {};				//テクスチャの情報
+bool				CBulletUI::m_bSpeedFlash = false;		//残弾表示スイッチ
 
 //*****************************************************************************
 //コンストラクタ
@@ -23,7 +23,7 @@ CBulletUI::CBulletUI(int nPriority) : CScene(nPriority)
 {
 	m_pos = D3DXVECTOR3(0, 0, 0);			// ポリゴンの位置
 	m_size = D3DXVECTOR3(0, 0, 0);			// ポリゴン大きさ
-	for (int nCount = 0; nCount < 5; nCount++)
+	for (int nCount = 0; nCount < MAX_BULLET; nCount++)
 	{
 		m_apScene2D[nCount] = NULL;		//シーン2Dのポインタ配列
 	}
@@ -57,7 +57,7 @@ HRESULT CBulletUI::Load(void)
 //*****************************************************************************
 void CBulletUI::UnLoad(void)
 {
-	for (int nCntTex = 0; nCntTex < 5; nCntTex++)
+	for (int nCntTex = 0; nCntTex < MAX_BULLET; nCntTex++)
 	{
 		if (m_pTexture != NULL)
 		{
@@ -90,7 +90,7 @@ CBulletUI * CBulletUI::Create()
 HRESULT CBulletUI::Init()
 {
 	//残弾の生成
-	for (int nCntInit = 0; nCntInit < 5; nCntInit++)
+	for (int nCntInit = 0; nCntInit < MAX_BULLET; nCntInit++)
 	{
 		m_apScene2D[nCntInit] = NULL;
 		if (m_apScene2D[nCntInit] == NULL)
@@ -105,7 +105,7 @@ HRESULT CBulletUI::Init()
 		}
 	}
 	m_BulletCnt = 0;	//残弾数
-	m_bUse = false;
+	m_bSpeedFlash = false;
 	return S_OK;
 }
 
@@ -115,7 +115,7 @@ HRESULT CBulletUI::Init()
 void CBulletUI::Uninit(void)
 {
 	//残弾の破棄
-	for (int nCntUninit = 0; nCntUninit < 5; nCntUninit++)
+	for (int nCntUninit = 0; nCntUninit < MAX_BULLET; nCntUninit++)
 	{
 		if (m_apScene2D[nCntUninit] != NULL)
 		{
@@ -132,16 +132,19 @@ void CBulletUI::Uninit(void)
 //*****************************************************************************
 void CBulletUI::Update(void)
 {
-		if (m_bUse == true)
+		if (m_bSpeedFlash == true)
 		{
  			m_apScene2D[m_BulletCnt]->SetColor(D3DCOLOR_RGBA(0, 0, 0, 0));
-			m_bUse = false;
-			if (CGame::GetGameState() != CGame::GAMESTATE_END && CGame::GetGameState() != (CGame::GAMESTATE_SPEEDUP))
+			m_bSpeedFlash = false;
+			if (CGame::GetGameState() != CGame::GAMESTATE_END &&
+				CGame::GetGameState() != (CGame::GAMESTATE_SPEEDUP))
 			{
 				m_BulletCnt++;
  			}
 		}
-		if (m_BulletCnt == 5 && CGame::GetGameState() != (CGame::GAMESTATE_ENEMYBREAK) && CGame::GetGameState() != (CGame::GAMESTATE_SPEEDUP))
+		if (m_BulletCnt == MAX_BULLET &&
+			CGame::GetGameState() != (CGame::GAMESTATE_ENEMYBREAK) && 
+			CGame::GetGameState() != (CGame::GAMESTATE_SPEEDUP))
 		{
 			CGame::SetGameState(CGame::GAMESTATE_END);
 		}
@@ -153,7 +156,7 @@ void CBulletUI::Update(void)
 void CBulletUI::Draw(void)
 {
 	//背景の描画
-	for (int nCntDraw = 0; nCntDraw < 5; nCntDraw++)
+	for (int nCntDraw = 0; nCntDraw < MAX_BULLET; nCntDraw++)
 	{
 		if (m_apScene2D[nCntDraw] != NULL)
 		{
@@ -163,19 +166,11 @@ void CBulletUI::Draw(void)
 }
 
 //*****************************************************************************
-//残弾格納関数
-//*****************************************************************************
-void CBulletUI::SetBulletCnt(int bulletcnt)
-{
-	m_BulletCnt = bulletcnt;
-}
-
-//*****************************************************************************
 //弾装填関数
 //*****************************************************************************
 void CBulletUI::Loading(void)
 {
-	for (int nCnt = 0; nCnt < 5; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_BULLET; nCnt++)
 	{
 		//装填
 		m_apScene2D[nCnt]->SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));

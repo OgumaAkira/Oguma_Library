@@ -21,6 +21,9 @@ class CFade;
 class CScore;
 class CBulletUI;
 class CCombo;
+class CSpeed;
+class CUi;
+class CComboUI;
 
 //*****************************************************************************
 //ゲーム画面のクラス宣言
@@ -53,25 +56,26 @@ public:
 	void SetEnemy(int enemy) { m_nNumEnemy = enemy; }						//敵の情報格納関数
 	static void SetGameState(GAMESTATE state) {m_GameState = state;};		//ゲーム状態設定
 	static GAMESTATE GetGameState(void) { return m_GameState; }				//ゲーム状態取得
-	static int GetGameSpeed(void) { return m_GameSpeed; }					//ゲームスピード取得
-	static int GetEnemy(void) { return m_nNumEnemy; }						//敵の情報取得関数
 	D3DXVECTOR3 GetRandPos(void);											//敵の乱数配置位置取得関数
 	D3DXVECTOR3 GetRandMove(void);											//敵の乱数配置慣性取得関数
+
 private:
 	//メンバ変数
-	static GAMESTATE			m_GameState;			//状態
-	int							m_WholeEnemy;			//敵のスピードアップまでの数
-	static int					m_nNumEnemy;			//敵の画面に現れる敵の数
-	static int					m_GameSpeed;			//敵の移動速度
-	static CBg					*m_pBg;					//背景のポインタ
-	static CFade				*m_pFade;				//フェードポインタ
-	static CPlayer				*m_pPlayer;				//プレイヤーのポインタ
-	static CEnemy				*m_pEnemy;				//敵のポインタ
-	static CScore				*m_pScore;				//スコアのポインタ
-	static CSpeed				*m_pSpeed;				//スピードのポインタ
-	static CBulletUI			*m_pBulletUI;			//残弾のポインタ
-	static CBullet				*m_pBullet;				//弾のポインタ
-	static CCombo				*m_pCombo;				//コンボのポインタ
-	CSound						*pSound;				//サウンドのポインタ
+	static GAMESTATE	m_GameState;			//状態
+	int					m_WholeEnemy;			//敵のスピードアップまでの数
+	int					m_nNumEnemy;			//敵の画面に現れる敵の数
+	int					m_GameSpeed;			//敵の移動速度
+	CBg					*m_pBg;					//背景のポインタ
+	CFade				*m_pFade;				//フェードポインタ
+	CPlayer				*m_pPlayer;				//プレイヤーのポインタ
+	CEnemy				*m_pEnemy;				//敵のポインタ
+	CSpeed				*m_pSpeedUI;			//スピードのポインタ
+	CBullet				*m_pBullet;				//弾のポインタ
+	CScore				*m_pScore;				//スコアのポインタ
+	CBulletUI			*m_pBulletUI;			//残弾のポインタ
+	CCombo				*m_pCombo;				//コンボのポインタ
+	CComboUI			*m_pComboUI;			//コンボUIのポインタ
+	CUi					*m_pUi;					//UIのポインタ
+	CSound				*m_pSound;				//サウンドのポインタ
 };
 #endif

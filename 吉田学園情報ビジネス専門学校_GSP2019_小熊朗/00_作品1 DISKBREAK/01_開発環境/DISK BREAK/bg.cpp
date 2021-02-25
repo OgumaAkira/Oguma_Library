@@ -14,7 +14,7 @@
 //*****************************************************************************
 //静的メンバ変数
 //*****************************************************************************
-LPDIRECT3DTEXTURE9	CBg::m_pTexture[3] = {};		//テクスチャの情報
+LPDIRECT3DTEXTURE9	CBg::m_pTexture[MAX_BG_TEXTURE] = {};		//テクスチャの情報
 
 //*****************************************************************************
 //コンストラクタ
@@ -26,7 +26,7 @@ CBg::CBg(int nPriority) :CScene(nPriority)
 	m_size = D3DXVECTOR3(0, 0, 0);			// ポリゴン大きさ
 	m_nCounterAnim = 0;
 	m_nPatternAnim = 0;//アニメーションパターンNo.
-	for (int nCount = 0; nCount < 3; nCount++)
+	for (int nCount = 0; nCount < MAX_BG_TEXTURE; nCount++)
 	{
 		m_apScene2D[nCount] = NULL;		//シーン2Dのポインタ配列
 	}
@@ -50,15 +50,15 @@ HRESULT CBg::Load(void)
 
 	//テクスチャの読み込み(宇宙1)
 	D3DXCreateTextureFromFile(pDevice,
-		BG_SPACE01_TEXTURE, &m_pTexture[0]);
+		BG_SPACE01_TEXTURE, &m_pTexture[BGTYPE_SPACE1]);
 
 	//テクスチャの読み込み（宇宙2）
 	D3DXCreateTextureFromFile(pDevice,
-		BG_SPACE02_TEXTURE, &m_pTexture[1]);
+		BG_SPACE02_TEXTURE, &m_pTexture[BGTYPE_SPACE2]);
 
 	//テクスチャの読み込み（宇宙3）
 	D3DXCreateTextureFromFile(pDevice,
-		BG_SPACE03_TEXTURE, &m_pTexture[2]);
+		BG_SPACE03_TEXTURE, &m_pTexture[BGTYPE_SPACE3]);
 
 	return S_OK;
 }
@@ -101,7 +101,7 @@ CBg * CBg::Create()
 HRESULT CBg::Init()
 {
 	//背景の生成
-	for (int nCntInit = 0; nCntInit < 3; nCntInit++)
+	for (int nCntInit = 0; nCntInit < MAX_BG_TEXTURE; nCntInit++)
 	{
 		m_apScene2D[nCntInit] = NULL;
 
@@ -124,7 +124,7 @@ HRESULT CBg::Init()
 void CBg::Uninit(void)
 {
 	//背景の破棄
-	for (int nCntUninit = 0; nCntUninit < 3; nCntUninit++)
+	for (int nCntUninit = 0; nCntUninit < MAX_BG_TEXTURE; nCntUninit++)
 	{
 		if (m_apScene2D[nCntUninit] != NULL)
 		{
@@ -148,7 +148,7 @@ void CBg::Update(void)
 	
 	case CManager::MODE_GAME:
 	//背景のテクスチャ座標設定
-	for (int nCntUninit = 0; nCntUninit < 3; nCntUninit++)
+	for (int nCntUninit = 0; nCntUninit < MAX_BG_TEXTURE; nCntUninit++)
 	{
 		if (m_apScene2D[nCntUninit] != NULL)
 		{
@@ -186,7 +186,7 @@ void CBg::Update(void)
 void CBg::Draw(void)
 {
 	//背景の描画
-	for (int nCntDraw = 0; nCntDraw < 3; nCntDraw++)
+	for (int nCntDraw = 0; nCntDraw < MAX_BG_TEXTURE; nCntDraw++)
 	{
 		if (m_apScene2D[nCntDraw] != NULL)
 		{

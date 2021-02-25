@@ -25,7 +25,7 @@ CFade::CFade(int nPriority) :CScene(nPriority)
 	m_pos = D3DXVECTOR3(0, 0, 0);			// ポリゴンの位置
 	m_size = D3DXVECTOR3(0, 0, 0);			// ポリゴン大きさ
 	m_pScene2D = NULL;						//シーン2Dのポインタ配列
-	m_bUse = true;							//
+	m_bSpeedFlash = true;							//
 }
 
 //*****************************************************************************
@@ -97,7 +97,7 @@ HRESULT CFade::Init()
 			m_pScene2D->SetSize(D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0));				//大きさ
 			m_FadeState = FADESTATE_OUT;													//フェードの状態
 			m_pScene2D->BirdTexture(m_pTexture);											//テクスチャの情報
-			m_bUse = true;																	//フェードのスイッチ
+			m_bSpeedFlash = true;																	//フェードのスイッチ
 			m_color = 0;																	//色
 		}
 	return S_OK;
@@ -132,7 +132,7 @@ void CFade::Update(void)
 		//フェードインの場合
 		case FADESTATE_IN:
 			//フェードスイッチがオフの場合
-			if (m_bUse == false)
+			if (m_bSpeedFlash == false)
 			{
 				//色を徐々に濃くしていく
 				m_pScene2D->SetColor(D3DCOLOR_RGBA(m_color,m_color,m_color,m_color));
@@ -141,7 +141,7 @@ void CFade::Update(void)
 			//色の最大値まで行った場合
 			if (m_color == 255)
 			{
-				m_bUse = true;					//フェードスイッチをオンにする
+				m_bSpeedFlash = true;					//フェードスイッチをオンにする
 				m_FadeState = FADESTATE_NONE;	//フェード状態を何もない状態にする
 				m_color = 255;					//一色にする
 			}
@@ -150,7 +150,7 @@ void CFade::Update(void)
 		//フェードアウトの場合
 		case FADESTATE_OUT:
 			//フェードスイッチがオンの場合
-			if (m_bUse == true)
+			if (m_bSpeedFlash == true)
 			{
 				//色を徐々に抜けていく
 				m_pScene2D->SetColor(D3DCOLOR_RGBA(255 - m_color, 255 - m_color, 255 - m_color, 255 - m_color));
@@ -159,7 +159,7 @@ void CFade::Update(void)
 			//色の最大値まで行った場合
 			if (m_color == 255)
 			{
-				m_bUse = false;					//フェードスイッチをオフにする
+				m_bSpeedFlash = false;					//フェードスイッチをオフにする
 				m_FadeState = FADESTATE_MAX;	//フェード状態をMAXにする
 				m_color = 0;					//色を無くす
 			}

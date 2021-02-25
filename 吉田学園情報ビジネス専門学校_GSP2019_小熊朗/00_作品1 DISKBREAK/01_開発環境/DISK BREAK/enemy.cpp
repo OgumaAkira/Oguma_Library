@@ -73,7 +73,7 @@ HRESULT CEnemy::Load(void)
 //*****************************************************************************
 void CEnemy::UnLoad(void)
 {
-	for (int nCount = 0; nCount < 2; nCount++)
+	for (int nCount = 0; nCount < MAX_ENEMY; nCount++)
 	{
 		if (m_apTexture[nCount] != NULL)
 		{
@@ -115,64 +115,35 @@ void CEnemy::Update(void)
 {
 	m_pos = GetPosition();						//更新位置を取得
 	CSound *pSound = CManager::GetSound();		//サウンド取得
-	CScene2D::Update();
+	CScene2D::Update();							//シーンの更新
 	int nCountEnemy = 1;						//敵の数
+
+	//ポーズ画面以外の場合
+	if (CManager::GetMode() != CManager::MODE_PAUSE)
+	{
+		Range();
+	}
 
 	//敵の状態
 	switch (m_state)
 	{
 	//通常
 	case ENEMYSTATE_NORMAL:
-		SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));				//色の設定
+		SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));			//色の設定
 		break;
 
+		//敵が倒された時
 	case ENEMYRSTATE_DEATH:
-		pSound->PlaySound(CSound::SOUND_LABEL_SE_EXPLOSION);		//サウンド
-		CExplosion::Create(m_pos, m_size);
+		pSound->PlaySound(CSound::SOUND_LABEL_SE_EXPLOSION);	//サウンド
+		CExplosion::Create(m_pos, m_size);						//爆発演出
 		Uninit();
-		CGame::SetGameState(CGame::GAMESTATE_ENEMYBREAK);			//ゲームの状態
+		 CGame::SetGameState(CGame::GAMESTATE_ENEMYBREAK);		//ゲームの状態
 		break;
 
 	default:
 		break;
 	}
-
-	m_pos += m_move;//敵の移動速度
-
-	//敵の乱数配置
-	for (int nCntEnemy = 0; nCntEnemy < MAX_ENEMY; nCntEnemy++)
-	{
-		if ((rand() % (nCountEnemy * 25)) == 0)
-		{
-			//弾の生成
-			CBullet *pBullet = CManager::GetBullet();
-		}
-	}
-
-	//画面外へ行く場合画面内に反射させる。
-	if (m_pos.x - (m_size.x / 2) < 0)
-	{
-		//左
-		m_move.x *= -1;
-	}
-	if (m_pos.x + (m_size.x / 2) > SCREEN_WIDTH )
-	{
-		//右
-		m_move.x *= -1;
-	}
-	if (m_pos.y + (m_size.y / 2) > SCREEN_HEIGHT)
-	{
-		//上
-		m_move.y *= -1;
-	}
-	if (m_pos.y - (m_size.y / 2) < 0)
-	{
-		//下
-		m_move.y *= -1;
-	}
-
-	//プレイヤーの位置更新
-	SetPosition(m_pos);
+	SetPosition(m_pos);											//プレイヤーの位置更新
 }
 
 //*****************************************************************************
@@ -194,5 +165,35 @@ void CEnemy::HitDamege(int nDamege)
 	if (m_nHP <= 0)
 	{
 		m_state = ENEMYRSTATE_DEATH;	//敵の死亡状態
+	}
+}
+
+//*****************************************************************************
+//移動範囲関数
+//*****************************************************************************
+void CEnemy::Range(void)
+{
+	m_pos += m_move;//敵の移動速度
+
+	//画面外へ行く場合画面内に反射させる。
+	if (m_pos.x - (m_size.x / 2) < 0)
+	{
+		//左
+		m_move.x *= -1;
+	}
+	if (m_pos.x + (m_size.x / 2) > SCREEN_WIDTH)
+	{
+		//右
+		m_move.x *= -1;
+	}
+	if (m_pos.y + (m_size.y / 2) > SCREEN_HEIGHT)
+	{
+		//上
+		m_move.y *= -1;
+	}
+	if (m_pos.y - (m_size.y / 2) < 0)
+	{
+		//下
+		m_move.y *= -1;
 	}
 }

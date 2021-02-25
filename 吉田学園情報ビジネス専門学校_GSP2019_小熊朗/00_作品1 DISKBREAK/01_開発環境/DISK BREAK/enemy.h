@@ -46,7 +46,7 @@ public:
 		ENEMYTYPE_MAX				//最大数
 	}ENEMYTYPE;
 
-	CEnemy(int nPriority = 5);				//コンストラクタ
+	CEnemy(int nPriority = 0);				//コンストラクタ
 	~CEnemy();								//デストラクタ
 
 	//メンバ関数
@@ -55,8 +55,8 @@ public:
 	void Uninit(void);																			//終了処理
 	void Update(void);																			//更新処理
 	void Draw(void);																			//描画処理
-	void CEnemy::HitDamege(int nDamege);														//
-	bool Collision(D3DXVECTOR3*Pos, D3DXVECTOR3*PosOld, D3DXVECTOR3*Move, D3DXVECTOR3 * Size);	//
+	void CEnemy::HitDamege(int nDamege);														//ヒットダメージ関数
+	void Range(void);																			//移動範囲
 	static HRESULT Load(void);																	//読み込み処理
 	static void UnLoad(void);																	//テクスチャの破棄
 
@@ -73,6 +73,6 @@ private:
 	bool					m_bContact;					//当たり判定2
 	CInput* m_pInput;									//デバッグ操作用
 	CScore* m_pScore;									//スコアのポインタ
-	static LPDIRECT3DTEXTURE9		m_apTexture[2];		//テクスチャの情報
+	static LPDIRECT3DTEXTURE9		m_apTexture[MAX_ENEMY];		//テクスチャの情報
 };
 #endif 

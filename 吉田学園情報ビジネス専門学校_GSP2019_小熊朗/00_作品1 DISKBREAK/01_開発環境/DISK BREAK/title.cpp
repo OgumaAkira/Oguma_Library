@@ -19,12 +19,9 @@
 #include "player.h"
 #include "button.h"
 #include "sound.h"
-#include "speed.h"
 #include "fade.h"
-#include "tutorial.h"
-#include "titlelogo.h"
 #include "hiscore.h"
-#include "hiscoreUI.h"
+#include "ui.h"
 
 //*****************************************************************************
 //静的メンバ変数
@@ -33,10 +30,8 @@ CBg				*CTitle::m_pBg = NULL;			//背景のポインタ
 CFade			*CTitle::m_pFade = NULL;		//フェードのポインタ
 CPlayer			*CTitle::m_pPlayer = NULL;		//プレイヤーのポインタ
 CButton			*CTitle::m_pButton = NULL;		//ボタンのポインタ
-CTitleLogo		*CTitle::m_pTitileLogo = NULL;	//タイトルロゴのポインタ
-CTutorial		*CTitle::m_pTutorial = NULL;	//チュートリアル
 CHIScore		*CTitle::m_pHiScore = NULL;		//ハイスコア
-CHiScoreUI		*CTitle::m_pHiScoreUI = NULL;	//ハイスコアUI
+CUi				*CTitle::m_pUi = NULL;			//ハイスコアUI
 
 
 //*****************************************************************************
@@ -78,25 +73,29 @@ HRESULT CTitle::Init()
 	m_pBg = CBg::Create();		//背景のクリエイト
 	POINT posPoint;
 	GetCursorPos(&posPoint);	// マウス座標を取得する
-	bUse = true;//スイッチ
+	m_bButton = true;//スイッチ
 	//ボタンの生成
 	m_pButton = CButton::Create(D3DXVECTOR3(BUTTON_POSX, BUTTON_POSY, 0),
 								D3DXVECTOR3(500.0f, 200.0f, 0.0f), 
 								CButton::BUTTONTYPE_TITLE);
-	//チュートリアルの生成
-	m_pTutorial = CTutorial::Create(D3DXVECTOR3(1600, 700, 0), 
-									D3DXVECTOR3(500, 500, 0));
 	//タイトルロゴの生成
-	m_pTitileLogo = CTitleLogo::Create(D3DXVECTOR3(SCREEN_WIDTH/2.05f, SCREEN_HEIGHT/2.5, 0),
-										D3DXVECTOR3(1000,900,0));
-	//ハイスコアの生成
-	m_pHiScoreUI = CHiScoreUI::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.5, SCORE_POS_Y + 100, 0),
-										D3DXVECTOR3(300,70,0),CHiScoreUI::HISCORETYPE_HISCORE);
+	m_pUi = CUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.05f, SCREEN_HEIGHT / 2.5, 0),
+						D3DXVECTOR3(1000, 900, 0), CUi::UITYPE_TITLELOGO);
+
+	//チュートリアルの生成
+	m_pUi = CUi::Create(D3DXVECTOR3(1600, 700, 0),
+						D3DXVECTOR3(500, 500, 0), CUi::UITYPE_TUTORIAL);
+
+	//ハイスコアUIの生成
+	m_pUi = CUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.5, SCORE_POS_Y + 100, 0),
+						D3DXVECTOR3(300,70,0),CUi::UITYPE_HISCORE);
+
 	//ハイスコアのクリエイト
 	m_pHiScore = CHIScore::Create();
+
 	//プレイヤーの生成
 	m_pPlayer = CPlayer::Create(D3DXVECTOR3((float)posPoint.x,(float)posPoint.y, 0),
-								D3DXVECTOR3(PLAYER_SIZEX, PLAYER_SIZEY, 0),OBJTYPE_CURSOR);
+								D3DXVECTOR3(PLAYER_SIZEX, PLAYER_SIZEY, 0));
 	
 	m_pFade = CFade::Create();	//フェードのクリエイト
 
@@ -119,19 +118,24 @@ void CTitle::Update(void)
 {	
 	pSound = CManager::GetSound();	//サウンドの情報取得
 	//スイッチがオンだった場合
-	if (bUse==true)
+	if (m_bButton==true)
 	{
-		//サウンド再生
+#if DEBUG_SOUND
+		//タイトルBGM
 		pSound->PlaySound(CSound::SOUND_LABEL_TITLEBGM);
-		bUse = false;
+#endif // DEBUG_SOUND
+
+		m_bButton = false;
 	}
 	m_pFade->Update();
 
 	//フェードの状態がNONEだった場合
 	if (m_pFade->GetFade() == CFade::FADESTATE_NONE)
 	{
+#if DEBUG_SOUND
 		//サウンド停止
 		pSound->StopSound(CSound::SOUND_LABEL_TITLEBGM);
+#endif // DEBUG_SOUND
 		CManager::SetMode(CManager::MODE_GAME);
 	}
 }

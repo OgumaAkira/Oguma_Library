@@ -17,7 +17,7 @@ class CButton;
 class CScore;
 class CSound;
 class CHIScore;
-class CHiScoreUI;
+class CUi;
 
 //*****************************************************************************
 //リザルト画面のクラス宣言
@@ -43,8 +43,8 @@ private:
 	static CButton			*m_pButton;			//ボタンのポインタ
 	static CScore			*m_pScore;			//スコアのポインタ
 	static CHIScore			*m_pHiScore;		//ハイスコアのポインタ
-	static CHiScoreUI		*m_pHiScoreUI;		//ハイスコアUIのポインタ
+	static CUi				*m_pHiScoreUI;		//ハイスコアUIのポインタ
 	CInput*					m_pInput;			//インプットのポインタ
-	bool					m_bUse;				//スイッチ
+	bool					m_bButton;		//スイッチ
 };
 #endif

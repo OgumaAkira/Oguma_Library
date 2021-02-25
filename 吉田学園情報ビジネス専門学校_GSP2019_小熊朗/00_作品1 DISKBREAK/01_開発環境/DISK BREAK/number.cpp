@@ -24,7 +24,7 @@ CNumber::CNumber()
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// ポリゴンの位置
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// ポリゴンの大きさ
 	m_tex = D3DXVECTOR2(0.0f, 0.0f);				//テスクチャ
-	m_color = D3DXCOLOR(255, 255, 255, 255);		//カラー
+	m_color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);		//カラー
 }
 
 //*****************************************************************************
@@ -109,7 +109,7 @@ HRESULT CNumber::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size, int nTex)
 	pVtx[2].rhw = 1.0f;	//左下
 	pVtx[3].rhw = 1.0f;	//右下
 
-						//色の設定
+	//色の設定
 	pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);	//左上
 	pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);	//右上
 	pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);	//左下
@@ -157,10 +157,10 @@ void CNumber::Update(void)
 	pVtx[3].pos = D3DXVECTOR3(m_pos.x + m_size.x / 2, m_pos.y + m_size.y / 2, 0.0f);	//右下
 
 	//色の設定
-	pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);	//左上
-	pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);	//右上
-	pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);	//左下
-	pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);	//右下
+	pVtx[0].col = D3DXCOLOR(m_color);//左上
+	pVtx[1].col = D3DXCOLOR(m_color);//右上
+	pVtx[2].col = D3DXCOLOR(m_color);//左下
+	pVtx[3].col = D3DXCOLOR(m_color);//右下
 
 	//テクスチャ座標の設定
 	pVtx[0].tex = D3DXVECTOR2(0, 0);

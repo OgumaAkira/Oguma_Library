@@ -13,7 +13,7 @@
 //*****************************************************************************
 //静的メンバ変数
 //*****************************************************************************
-LPDIRECT3DTEXTURE9	CButton::m_apTexture[2] = {};		//テクスチャの情報
+LPDIRECT3DTEXTURE9	CButton::m_apTexture[BUTTONTYPE_MAX] = {};	//テクスチャの情報
 
 //*****************************************************************************
 //コンストラクタ
@@ -22,7 +22,7 @@ CButton::CButton(int nPriority) :CScene2D(nPriority)
 {
 	m_pos = D3DXVECTOR3(0, 0, 0);			// ボタンの位置
 	m_size = D3DXVECTOR3(0, 0, 0);			// ポリゴン大きさ
-	m_bUse = false;
+	m_bButton = false;
 	m_state = BUTTONSTATE_NORMAL;
 }
 
@@ -66,6 +66,17 @@ HRESULT CButton::Load(void)
 	D3DXCreateTextureFromFile(pDevice,
 		RESULTBUTTON_TEXTURE, &m_apTexture[BUTTONTYPE_RESULT]);
 
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		GAMERETURNBUTTON_TEXTURE, &m_apTexture[BUTTONTYPE_PAUSEGAME]);
+
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		TITLERETURNBUTTON_TEXTURE, &m_apTexture[BUTTONTYPE_PAUSETITLE]);
+	
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+		PAUSEBUTTON_TEXTURE, &m_apTexture[BUTTONTYPE_PAUSE]); 
 	return S_OK;
 }
 
@@ -74,7 +85,7 @@ HRESULT CButton::Load(void)
 //*****************************************************************************
 void CButton::UnLoad(void)
 {
-	for (int nCount = 0; nCount < 2; nCount++)
+	for (int nCount = 0; nCount < BUTTONSTATE_MAX; nCount++)
 	{
 		if (m_apTexture[nCount] != NULL)
 		{
@@ -95,7 +106,7 @@ HRESULT CButton::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size, BUTTONTYPE type)
 	SetPosition(m_pos);							//位置格納
 	m_size = D3DXVECTOR3(size.x, size.y, 0);	//大きさ取得
 	SetSize(m_size);							//大きさ格納
-	m_bUse = true;								//ボタンの状態
+	m_bButton = true;								//ボタンの状態
 	m_state = BUTTONSTATE_NORMAL;				//初期状態
 	BirdTexture(m_apTexture[type]);				//テクスチャの情報をscene2dへ格納
 	return S_OK;
@@ -123,11 +134,11 @@ void CButton::Update(void)
 	{
 	//タイトル画面のボタン
 	case BUTTONSTATE_TITLE:
-		if (m_bUse == true)
+		if (m_bButton == true)
 		{
 			//SE
 			pSound->PlaySound(CSound::SOUND_LABEL_SE_BUTTON);
-			m_bUse = false;
+			m_bButton = false;
 		}
 			//色の変更
 			SetColor(D3DCOLOR_RGBA(0, 0, 255, 255));//青
@@ -136,15 +147,27 @@ void CButton::Update(void)
 
 	//リザルト画面のボタン
 	case BUTTONSTATE_RESULT:
-		if (m_bUse == true)
+		if (m_bButton == true)
 		{
 			//SE
 			pSound->PlaySound(CSound::SOUND_LABEL_SE_BUTTON);
-			m_bUse = false;
+			m_bButton = false;
 		}
 		//色の変更
 		SetColor(D3DCOLOR_RGBA(255, 0, 0, 255));//赤
-		m_pFade->SetFade(CFade::FADESTATE_IN);
+		break;
+
+	case BUTTONSTATE_PAUSETITLE:
+		//色の変更
+		SetColor(D3DCOLOR_RGBA(255, 0, 0, 255));//赤
+		CManager::SetMode(CManager::MODE_TITLE);
+		break;
+
+	case BUTTONSTATE_PAUSEGAME:
+		//色の変更
+		SetColor(D3DCOLOR_RGBA(255, 0, 0, 255));//赤	
+		pSound->PlaySound(CSound::SOUND_LABEL_GAMEBGM);
+		CManager::SetMode(CManager::MODE_GAME);
 		break;
 
 	//ボタンの初期設定
@@ -156,7 +179,6 @@ void CButton::Update(void)
 	default:
 		break;
 	}
-	
 }
 
 //*****************************************************************************
@@ -165,6 +187,32 @@ void CButton::Update(void)
 void CButton::Draw(void)
 {
 	CScene2D::Draw();
+}
+
+//*****************************************************************************
+//ポーズ画面ボタン関数
+//*****************************************************************************
+void CButton::PauseButton(void)
+{
+	POINT posPoint;
+	GetCursorPos(&posPoint);		//マウス座標を取得する
+	if (BUTTON_POSX - m_size.x / 2 <= posPoint.x&&
+		BUTTON_POSX + m_size.x / 2 >= posPoint.x&&
+		BUTTON_POSY / 2 - m_size.y / 2 <= posPoint.y&&
+		BUTTON_POSY / 2 + m_size.y / 2 >= posPoint.y)
+	{
+		SetColor(D3DCOLOR_RGBA(255, 0, 0, 255));//赤
+		m_state = BUTTONSTATE_PAUSEGAME;
+
+	}
+	else if (BUTTON_POSX - m_size.x / 2 <= posPoint.x&&
+			BUTTON_POSX + m_size.x / 2 >= posPoint.x&&
+			BUTTON_POSY - m_size.y / 2 <= posPoint.y&&
+			BUTTON_POSY + m_size.y / 2 >= posPoint.y)
+	{
+		SetColor(D3DCOLOR_RGBA(255, 0, 0, 255));//赤
+		m_state = BUTTONSTATE_PAUSETITLE;
+	}
 }
 
 //*****************************************************************************
@@ -178,12 +226,17 @@ void CButton::SetButton(void)
 		//モードの状態
 		switch (CManager::GetMode())
 		{
-		//タイトル画面だった場合
+			//タイトル画面だった場合
 		case CManager::MODE_TITLE:
 			m_state = BUTTONSTATE_TITLE;	//タイトルボタンへ
 			break;
 
-		//リザルト画面だった場合
+			//ポーズ画面だった場合
+		case CManager::MODE_PAUSE:
+			PauseButton();
+			break;
+
+			//リザルト画面だった場合
 		case CManager::MODE_RESULT:
 			m_state = BUTTONSTATE_RESULT;	//リザルトボタンへ
 			break;

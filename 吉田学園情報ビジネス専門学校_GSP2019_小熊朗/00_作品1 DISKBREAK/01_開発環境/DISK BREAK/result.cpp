@@ -21,7 +21,7 @@
 #include "button.h"
 #include "fade.h"
 #include "hiscore.h"
-#include "hiscoreUI.h"
+#include "ui.h"
 
 //*****************************************************************************
 //静的メンバ変数
@@ -32,14 +32,14 @@ CFade			*CResult::m_pFade = NULL;	//フェードのポインタ
 CButton			*CResult::m_pButton = NULL;	//ボタンのポインタ
 CScore			*CResult::m_pScore = NULL;//スコアのポインタ
 CHIScore		*CResult::m_pHiScore = NULL;		//ハイスコア
-CHiScoreUI		*CResult::m_pHiScoreUI = NULL;		//ハイスコアUI
+CUi				*CResult::m_pHiScoreUI = NULL;		//ハイスコアUI
 
 //*****************************************************************************
 //コンストラクタ
 //*****************************************************************************
 CResult::CResult(int nPriority) : CScene(nPriority)
 {
-	m_bUse = true;//リザルト画面のスイッチ
+	m_bButton = true;//リザルト画面のスイッチ
 }
 
 //*****************************************************************************
@@ -78,17 +78,18 @@ HRESULT CResult::Init()
 								D3DXVECTOR3(500.0f, 200.0f, 0.0f), CButton::BUTTONTYPE_RESULT);
 
 	//ハイスコアUIの生成
-	m_pHiScoreUI = CHiScoreUI::Create(D3DXVECTOR3(SCREEN_WIDTH / 4.3f, SCORE_POS_Y + 270, 0), 
-									D3DXVECTOR3(600, 150, 0),CHiScoreUI::HISCORETYPE_HISCORE);
-	m_pHiScoreUI = CHiScoreUI::Create(D3DXVECTOR3(SCREEN_WIDTH / 1.5f, SCORE_POS_Y + 270, 0),
-									D3DXVECTOR3(600, 150, 0), CHiScoreUI::HISCORETYPE_MYSCORE);
+	m_pHiScoreUI = CUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 4.3f, SCORE_POS_Y + 270, 0), 
+									D3DXVECTOR3(600, 150, 0),CUi::UITYPE_HISCORE);
+	m_pHiScoreUI = CUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 1.5f, SCORE_POS_Y + 270, 0),
+									D3DXVECTOR3(600, 150, 0), CUi::UITYPE_MYSCORE);
 
 	//プレイヤーの生成
 	m_pPlayer = CPlayer::Create(D3DXVECTOR3((float)posPoint.x, (float)posPoint.y, 0.0f), 
-								D3DXVECTOR3(PLAYER_SIZEX, PLAYER_SIZEY, 0), OBJTYPE_CURSOR);
+								D3DXVECTOR3(PLAYER_SIZEX, PLAYER_SIZEY, 0));
 
-	m_pFade = CFade::Create();			//フェードのクリエイト
-	m_bUse = true;						//リザルト画面のスイッチ
+
+	m_pFade = CFade::Create();				//フェードのクリエイト
+	m_bButton = true;						//リザルト画面のスイッチ
 	return S_OK;
 }
 
@@ -105,20 +106,26 @@ void CResult::Uninit(void)
 //*****************************************************************************
 void CResult::Update(void)
 {
-	//サウンド
-	CSound *pSound = CManager::GetSound();
-	m_pFade->Update();
-	m_pBg->Update();
-	if (m_bUse==true)
+	CSound *pSound = CManager::GetSound();		//サウンド情報取得
+	m_pFade->Update();							//フェードの更新
+	m_pBg->Update();							//背景の更新
+
+	//ボタンが押されていない場合
+	if (m_bButton==true)
 	{
-		pSound->PlaySound(CSound::SOUND_LABEL_RESULTBGM);
+		#if DEBUG_SOUND
+		pSound->PlaySound(CSound::SOUND_LABEL_RESULTBGM);	//リザルトBGMを流す
+		#endif // DEBUG_SOUND
+		m_bButton = false;									//リザルト画面のボタン
 		m_pHiScore = CHIScore::Create();
 		m_pScore = CScore::Create();
-		m_bUse = false;
 	}
 	if (m_pFade->GetFade() == CFade::FADESTATE_NONE)
 	{
+		#if DEBUG_SOUND
+		//サウンド停止
 		pSound->StopSound(CSound::SOUND_LABEL_RESULTBGM);
+		#endif // DEBUG_SOUND
 		CManager::SetMode(CManager::MODE_TITLE);
 	}
 }

@@ -28,8 +28,8 @@ CCombo::CCombo(int nPriority) :CScene(nPriority)
 	m_move = D3DXVECTOR3(0, 0, 0);			//移動量
 	m_pos = D3DXVECTOR3(0, 0, 0);			// ポリゴンの位置
 	m_size = D3DXVECTOR3(0, 0, 0);			// ポリゴン大きさ
+	m_nColor = 0;							//色数値
 	m_nCombo = 0;							//コンボ数
-	m_bCombo = true;						//コンボ
 	m_nComboScore = 0;						//コンボスコア値
 	m_nComboCountFrame = 0;					//コンボのカウントフレーム
 	for (int nCount = 0; nCount < MAX_COMBO_NUMBER; nCount++)
@@ -65,8 +65,8 @@ CCombo * CCombo::Create()
 //*****************************************************************************
 HRESULT CCombo::Init()
 {
+	m_nColor = 255;							//色数値
 	m_nCombo = 0;							//コンボ数
-	m_bCombo = true;						//コンボ
 	m_nComboScore = 0;						//コンボスコア値
 	m_nComboCountFrame = 0;					//コンボのカウントフレーム
 
@@ -74,7 +74,7 @@ HRESULT CCombo::Init()
 	for (int nCntInit = 0; nCntInit < MAX_COMBO_NUMBER; nCntInit++)
 	{
 		m_apNumber[nCntInit] = CNumber::Create(
-			D3DXVECTOR3((float)(0 + (COMBO_SIZE_X / 2) + (COMBO_POS_X *nCntInit)), COMBO_POS_Y, 0),
+			D3DXVECTOR3((float)(COMBOUI_SIZEX + 5 + (COMBO_SIZE_X / 2) + (COMBO_POS_X *nCntInit)), COMBO_POS_Y, 0),
 			D3DXVECTOR3(COMBO_SIZE_X, COMBO_SIZE_Y, 0), 0);
 	}
 	return S_OK;
@@ -142,34 +142,37 @@ void CCombo::Draw(void)
 //*****************************************************************************
 void CCombo::ComboAction(void)
 {
-	if (m_bCombo == true && CGame::GetGameState()==CGame::GAMESTATE_ENEMYBREAK)
+	if (CGame::GetGameState()==CGame::GAMESTATE_ENEMYBREAK)
 	{
 		m_nCombo += 1;
+		m_nColor = 0;
 		m_nComboCountFrame = 0;
-	}
-	else
-	{
-		m_bCombo = true;
-	}
-	//コンボ中で無ければ処理をしない
-	if (m_bCombo == false)
-	{
-		return;
 	}
 
 	//経過カウントフレーム
-	if (CGame::GetGameState() == CGame::GAMESTATE_NORMAL)
+	else if (CGame::GetGameState() == CGame::GAMESTATE_NORMAL)
 	{
+		m_nColor += 1;
 		m_nComboCountFrame++;
+		if (m_nColor >= 255)
+		{
+			m_nColor = 255;
+		}
+		for (int nCnt = 0; nCnt < MAX_COMBO_NUMBER; nCnt++)
+		{
+			m_apNumber[nCnt]->SetColor(D3DCOLOR_RGBA(255 - m_nColor,
+													 255 - m_nColor,
+													 255 - m_nColor,
+													 255 - m_nColor));
+		}
 	}
 
-	//一定フレーム以上経過したら
-	if (m_nComboCountFrame>250)
+	//一定フレーム以上経過もしくはゲーム終了時
+	 if (m_nComboCountFrame > 255 || CGame::GetGameState() == CGame::GAMESTATE_END)
 	{
-		m_bCombo = false;					//コンボを止める
-		m_nComboScore = m_nCombo * 200;		//コンボ数×200をコンボスコアに格納
-		CManager::GetScore() -> AddScore(m_nComboScore);	//加算スコア
-		m_nComboCountFrame = 0;				//カウントフレームを0にする
+		m_nComboScore = m_nCombo * 250;					//コンボのスコア値
+ 		CManager::GetScore() -> AddScore(m_nComboScore);	//加算スコア
+		m_nComboCountFrame = 0;
 		m_nCombo = 0;
 	}
 }

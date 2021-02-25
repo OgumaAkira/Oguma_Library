@@ -20,11 +20,6 @@
 #include "fade.h"
 
 //*****************************************************************************
-//マクロ定義
-//*****************************************************************************
-#define MAX_BUTTON (2)	//ボタンの最大数
-
-//*****************************************************************************
 //オブジェクト2クラス宣言
 //*****************************************************************************
 class CButton :public CScene2D
@@ -36,6 +31,8 @@ public:
 	{
 		BUTTONSTATE_NORMAL = 0,		//通常
 		BUTTONSTATE_TITLE,			//タイトル
+		BUTTONSTATE_PAUSETITLE,	
+		BUTTONSTATE_PAUSEGAME,		//ポーズ
 		BUTTONSTATE_RESULT,			//リザルト
 		BUTTONSTATE_MAX,			//最大数
 	}BUTTONSTATE;
@@ -45,6 +42,9 @@ public:
 	{
 		BUTTONTYPE_NORMAL = 0,		//通常
 		BUTTONTYPE_TITLE,			//タイトル
+		BUTTONTYPE_PAUSEGAME,		//ポーズゲーム
+		BUTTONTYPE_PAUSETITLE,		//ポーズタイトル
+		BUTTONTYPE_PAUSE,			//ポーズUI
 		BUTTONTYPE_RESULT,			//リザルト
 		BUTTONTYPE_MAX,				//最大数
 	}BUTTONTYPE;
@@ -58,6 +58,7 @@ public:
 	void Uninit(void);															//終了関数
 	void Update(void);															//更新関数
 	void Draw(void);															//描画関数
+	void PauseButton(void);														//ポーズ画面ボタン関数
 	void SetButton(void);														//ボタン状態格納関数
 	BUTTONSTATE GetButton(void) { return m_state; }								//ボタン状態取得関数
 	static HRESULT Load(void);													//ロード関数
@@ -69,10 +70,11 @@ private:
 	D3DXVECTOR3						m_move;						// ポリゴンの移動量
 	D3DXVECTOR3						m_size;						// ポリゴン大きさ
 	BUTTONSTATE						m_state;					//状態
+	BUTTONTYPE						m_type;						//画像種類
 	int								m_nCountState;				//ステートカウンター
-	bool							m_bUse;						//使用してるかどうか
+	bool							m_bButton;					//使用してるかどうか
 	CInput							*m_pInput;					//デバッグ操作用
 	CFade							*m_pFade;					//フェードのポインタ
-	static LPDIRECT3DTEXTURE9		m_apTexture[2];				//テクスチャの情報
+	static LPDIRECT3DTEXTURE9		m_apTexture[BUTTONTYPE_MAX];//テクスチャの情報
 };
 #endif 
