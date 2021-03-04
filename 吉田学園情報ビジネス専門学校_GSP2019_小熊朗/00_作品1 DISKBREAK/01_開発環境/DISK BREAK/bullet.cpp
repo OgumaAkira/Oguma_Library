@@ -89,8 +89,8 @@ void CBullet::UnLoad(void)
 //*****************************************************************************
 HRESULT CBullet::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 move, BULLET_TYPE type)
 {
-	CScene2D::Init();
 	//弾の初期設定
+	CScene2D::Init();
 	m_pos = D3DXVECTOR3(pos.x, pos.y, 0);	//位置
 	m_size = D3DXVECTOR3(size.x, size.y, 0);//大きさ　
 	m_move = move;							//移動量
@@ -99,6 +99,7 @@ HRESULT CBullet::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 move, BULLE
 	BirdTexture(m_pTexture);				//テクスチャの情報をscene2dに持ってく
 	SetObjType(CScene::OBJTYPE_BULLET);		//オブジェクトタイプ指定
 	SetPosition(m_pos);						//初期ポジション指定
+	//CSound *pSound = CManager::GetSound();	//サウンド関数を取得
 	SetSize(m_size);						//初期の大きさ指定
 	return S_OK;
 }
@@ -116,7 +117,6 @@ void CBullet::Uninit(void)
 //*****************************************************************************
 void CBullet::Update(void)
 {
-	CSound *pSound = CManager::GetSound();	//サウンド関数を取得
 	CScene2D::Update();
 	m_nHP--;	//弾のライフ
 
@@ -124,7 +124,6 @@ void CBullet::Update(void)
 	for (int nCntScene = 0; nCntScene < MAX_TEXTURE; nCntScene++)
 	{
 		bool bHitEnemy = false;		//判定なし
-
 		for (int nCountPriority = 0; nCountPriority < PRIORITY_MAX; nCountPriority++)
 		{
 			CScene *pScene = GetScene(nCountPriority, nCntScene);

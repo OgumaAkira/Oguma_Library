@@ -96,7 +96,6 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size, ENEMYTYPE nType)
 	m_nHP = 1;									//ライフ
 	m_state = ENEMYSTATE_NORMAL;				//状態
 	BirdTexture(m_apTexture[nType]);			//テクスチャの情報をscene2dに持ってく
-
 	return S_OK;
 }
 

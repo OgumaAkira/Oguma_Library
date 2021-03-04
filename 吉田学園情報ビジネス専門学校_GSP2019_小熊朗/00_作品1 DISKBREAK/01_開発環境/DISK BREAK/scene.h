@@ -33,6 +33,7 @@ public:
 		OBJTYPE_GAME,		//ゲーム画面
 		OBJTYPE_RESULT,		//リザルト画面
 		OBJTYPE_PAUSE,		//ポーズ画面
+		OBJTYPE_COMBOUI,	//コンボUI
 		OBJTYPE_MAX			//最大数
 	}OBJTYPE;
 

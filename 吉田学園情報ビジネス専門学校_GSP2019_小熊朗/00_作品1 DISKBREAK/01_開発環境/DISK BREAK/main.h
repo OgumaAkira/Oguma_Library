@@ -44,28 +44,28 @@
 #define BULLET_SIZEY (150.0f)											//弾Yの長さ
 #define	MAX_FLASHING (30)												//フラッシュするフレーム秒数
 #define MAX_BULLET	 (5)												//最大弾数
-#define DEBUG_SOUND (1)
-
+#define DEBUG_SOUND (0)
 //テクスチャマクロ
 #define MAX_TEXTURE (516)												//テクスチャの最大枚数
-#define PLAYER_TEXTURE ("data/TEXTURE/ターゲットマーカー.png")			//プレイヤーのTEXTURE
+#define PLAYER_TEXTURE ("data/TEXTURE/TargetMarker.png")				//プレイヤーのTEXTURE
 #define BULLET_TEXTURE ("data/TEXTURE/bullet000.png")					//弾のTEXTURE
-#define BULLETUI_TEXTURE ("data/TEXTURE/弾丸(黄色).png")				//残弾のTEXTURE
+#define BULLETUI_TEXTURE ("data/TEXTURE/BULLET.png")					//残弾のTEXTURE
 #define BG_SPACE01_TEXTURE ("data/TEXTURE/bg100.png")					//宇宙1のTEXTURE
 #define BG_SPACE02_TEXTURE ("data/TEXTURE/bg101.png")					//宇宙2のTEXTURE
 #define BG_SPACE03_TEXTURE ("data/TEXTURE/bg102.png")					//宇宙3のTEXTURE
 #define ENEMY_TEXTURE2 ("data/TEXTURE/敵　UFO１.png")					//敵のTEXTURE
 #define TITELBUTTON_TEXTURE ("data/TEXTURE/SHOOT THE STARTBUTTON.png")	//Titleボタンのテクスチャ
 #define RESULTBUTTON_TEXTURE ("data/TEXTURE/RETURN TO TITLE.png")		//Resultボタンのテクスチャ
-#define PAUSEBUTTON_TEXTURE ("data/TEXTURE/PAUSE_WINDOW.png")	//Resultボタンのテクスチャ
-#define TITLERETURNBUTTON_TEXTURE ("data/TEXTURE/TITLE_RETURN.png")	//Resultボタンのテクスチャ
-#define GAMERETURNBUTTON_TEXTURE ("data/TEXTURE/GAME_RETURN.png")	//Resultボタンのテクスチャ
-#define GAMETITLE_TEXTURE ("data/TEXTURE/ゲームタイトル.png")			//タイトルテクスチャ
-#define TUTORIAL_TEXTURE ("data/TEXTURE/チュートリアル.png")			//チュートリアルのテクスチャ
+#define PAUSEBUTTON_TEXTURE ("data/TEXTURE/PAUSE_WINDOW.png")			//ポーズのテクスチャ
+#define TITLERETURNBUTTON_TEXTURE ("data/TEXTURE/TITLE_RETURN.png")		//TITLEに戻るボタンのテクスチャ
+#define GAMERETURNBUTTON_TEXTURE ("data/TEXTURE/GAME_RETURN.png")		//ゲームに戻るボタンのテクスチャ
+#define GAMETITLE_TEXTURE ("data/TEXTURE/GAMETITLE.png")				//タイトルテクスチャ
+#define TUTORIAL_TEXTURE ("data/TEXTURE/TUTORIAL.png")					//チュートリアルのテクスチャ
 #define HISCOREUI_TEXTURE ("data/TEXTURE/HISCORE.png")					//ハイスコアのテクスチャ
 #define MYSCOREUI_TEXTURE ("data/TEXTURE/YOURSCORE.png")				//ハイスコアのテクスチャ
 #define SPEEDUP_TEXTURE ("data/TEXTURE/SPEEDUP!.png")					//スピードアップのテクスチャ
 #define NUMBER_TEXTURE ("data/TEXTURE/number_HGM.png")					//ナンバーのテクスチャ
+#define COMBOBONUS_TEXTURE ("data/TEXTURE/COMBO_BONUS.png")					//コンボボーナスのテクスチャ
 
 //プレイヤーマクロ
 #define PLAYER_SIZEX (150.0f)//プレイヤーのXの長さ
@@ -80,6 +80,7 @@
 #define ENEMY_POSY (150.0f)//敵のYの長さ
 #define ENEMY_SIZEX (250.0f)//敵のXの長さ
 #define ENEMY_SIZEY (150.0f)//敵のYの長さ
+
 
 //スコアナンバーマクロ
 #define MAX_SCORE_NUMBER (10)		//スコアナンバーの最大数

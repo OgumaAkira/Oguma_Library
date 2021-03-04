@@ -79,7 +79,6 @@ CBulletUI * CBulletUI::Create()
 	{
 		pBulletUI = new CBulletUI;
 		pBulletUI->Init();
-
 	}
 	return pBulletUI;
 }
@@ -132,22 +131,21 @@ void CBulletUI::Uninit(void)
 //*****************************************************************************
 void CBulletUI::Update(void)
 {
-		if (m_bSpeedFlash == true)
+	if (m_bSpeedFlash == true)
+	{
+		m_apScene2D[m_BulletCnt]->SetColor(D3DCOLOR_RGBA(0, 0, 0, 0));
+		m_bSpeedFlash = false;
+		if (CGame::GetGameState() == CGame::GAMESTATE_NORMAL)
 		{
- 			m_apScene2D[m_BulletCnt]->SetColor(D3DCOLOR_RGBA(0, 0, 0, 0));
-			m_bSpeedFlash = false;
-			if (CGame::GetGameState() != CGame::GAMESTATE_END &&
-				CGame::GetGameState() != (CGame::GAMESTATE_SPEEDUP))
-			{
-				m_BulletCnt++;
- 			}
+			m_BulletCnt++;
 		}
-		if (m_BulletCnt == MAX_BULLET &&
-			CGame::GetGameState() != (CGame::GAMESTATE_ENEMYBREAK) && 
-			CGame::GetGameState() != (CGame::GAMESTATE_SPEEDUP))
-		{
-			CGame::SetGameState(CGame::GAMESTATE_END);
-		}
+	}
+	else if (m_BulletCnt == MAX_BULLET &&
+		CGame::GetEnemy() >= 0 &&
+		CGame::GetGameState() == CGame::GAMESTATE_NORMAL)
+	{
+		CGame::SetGameState(CGame::GAMESTATE_END);
+	}
 }
 
 //*****************************************************************************

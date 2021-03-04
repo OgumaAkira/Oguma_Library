@@ -24,6 +24,8 @@ class CCombo;
 class CSpeed;
 class CUi;
 class CComboUI;
+class CComboBonus;
+class CComboBonusUI;
 
 //*****************************************************************************
 //ゲーム画面のクラス宣言
@@ -44,26 +46,26 @@ public:
 
 	}GAMESTATE;
 
-	CGame(int nPriority=2) ;												//コンストラクタ
-	~CGame();																//デストラクタ
-
-	//メンバ関数
-	static CGame *Create();													//クリエイト
-	HRESULT Init();															//初期化処理
-	void Uninit(void);														//終了処理
-	void Update(void);														//更新処理
-	void Draw(void);														//更新処理
-	void SetEnemy(int enemy) { m_nNumEnemy = enemy; }						//敵の情報格納関数
-	static void SetGameState(GAMESTATE state) {m_GameState = state;};		//ゲーム状態設定
-	static GAMESTATE GetGameState(void) { return m_GameState; }				//ゲーム状態取得
-	D3DXVECTOR3 GetRandPos(void);											//敵の乱数配置位置取得関数
-	D3DXVECTOR3 GetRandMove(void);											//敵の乱数配置慣性取得関数
+	CGame(int nPriority=2) ;										 //コンストラクタ
+	~CGame();														 //デストラクタ
+																	 
+	//メンバ関数													    
+	static CGame *Create();											 //クリエイト
+	HRESULT Init();													 //初期化処理
+	void Uninit(void);												 //終了処理
+	void Update(void);												 //更新処理
+	void Draw(void);												 //更新処理
+	static int GetEnemy(void)				  { return m_nNumEnemy;} //敵の情報格納関数
+	static void SetGameState(GAMESTATE state) {m_GameState = state;} //ゲーム状態設定
+	static GAMESTATE GetGameState(void)		  { return m_GameState;} //ゲーム状態取得
+	D3DXVECTOR3 GetRandPos(void);									 //敵の乱数配置位置取得関数
+	D3DXVECTOR3 GetRandMove(void);									 //敵の乱数配置慣性取得関数
 
 private:
 	//メンバ変数
 	static GAMESTATE	m_GameState;			//状態
+	static int			m_nNumEnemy;			//敵の画面に現れる敵の数
 	int					m_WholeEnemy;			//敵のスピードアップまでの数
-	int					m_nNumEnemy;			//敵の画面に現れる敵の数
 	int					m_GameSpeed;			//敵の移動速度
 	CBg					*m_pBg;					//背景のポインタ
 	CFade				*m_pFade;				//フェードポインタ
@@ -74,8 +76,10 @@ private:
 	CScore				*m_pScore;				//スコアのポインタ
 	CBulletUI			*m_pBulletUI;			//残弾のポインタ
 	CCombo				*m_pCombo;				//コンボのポインタ
-	CComboUI			*m_pComboUI;			//コンボUIのポインタ
-	CUi					*m_pUi;					//UIのポインタ
 	CSound				*m_pSound;				//サウンドのポインタ
+	CComboUI			*m_pComboUI;			//コンボUIのポインタ
+	CComboBonus			*m_pComboBonus;			//コンボスコアのポインタ
+	CComboBonusUI		*m_pComboBonusUI;			//コンボスコアのポインタ
+	CUi			*m_pUi;					//UIのポインタ
 };
 #endif

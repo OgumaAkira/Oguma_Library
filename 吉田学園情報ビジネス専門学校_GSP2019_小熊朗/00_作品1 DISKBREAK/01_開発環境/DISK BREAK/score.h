@@ -32,7 +32,7 @@ public:
 	void Uninit(void);									//終了処理
 	void Update(void);									//更新処理
 	void Draw(void);									//描画処理
-	void AddScore(int nScore);							//加算スコア処理	
+	void AddScore(int nScore);							//加算スコア関数	
 	int ReadFile(void);									//読み込みファイル関数
 	void WriteFile(void);								//書き込みファイル関数
 	void SetScore(int nScore)	{ m_nScore = nScore; }	//スコア値格納関数

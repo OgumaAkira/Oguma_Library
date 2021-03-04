@@ -29,6 +29,7 @@
 #include "speed.h"			//スピードUIのヘッダー
 #include "ui.h"				//UIのヘッター
 #include "combo.h"			//コンボのヘッター
+#include "combobonusUI.h"	//コンボボーナスのヘッター
 #include "comboUI.h"		//コンボUIのヘッター
 
 //*****************************************************************************
@@ -55,7 +56,10 @@ CCombo			*CManager::m_pCombo					= NULL;	//コンボのポインタ
 CSpeed			*CManager::m_pSpeed					= NULL;	//スピードUIのポインタ
 CUi				*CManager::m_pUi					= NULL;	//UIのポインタ
 CComboUI		*CManager::m_pComboUI				= NULL;	//コンボUIのポインタ
+CComboBonus		*CManager::m_pComboBonus			= NULL;	//コンボスコアのポインタ
+CComboBonusUI	*CManager::m_pComboBonusUI			= NULL;	//コンボスコアのポインタ
 CManager::MODE	 CManager::m_mode					= CManager::MODE_TITLE;	//初期モード
+
 //*****************************************************************************
 // コンストラクタ
 //*****************************************************************************
@@ -127,6 +131,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bMenu)
 	//コンボUIのテクスチャロード
 	CComboUI::Load();
 
+	//コンボボーナスUIのアンロード
+	CComboBonusUI::Load();
+
 	//UIのテクスチャロード
 	CUi::Load();
 
@@ -176,8 +183,13 @@ void CManager::Uninit(void)
 	//コンボUIのアンロード
 	CComboUI::UnLoad();
 
+	//コンボボーナスUIのアンロード
+	CComboBonusUI::UnLoad();
+
 	//UIのアンロード
 	CUi::UnLoad();
+
+
 
 	//キーボード入力破棄
 	if (m_pInputKeyboard != NULL)
@@ -353,10 +365,8 @@ void CManager::SetMode(MODE mode)
 		if (m_pGame != NULL)
 		{
 			m_pGame->CGame::Uninit();
-			m_pPause->CPause::Uninit();
 			CScene::ReleaseAll();
 			m_pGame = NULL;
-			m_pPause = NULL;
 		}
 		//リザルト画面を出す
 		if (m_pResult == NULL)

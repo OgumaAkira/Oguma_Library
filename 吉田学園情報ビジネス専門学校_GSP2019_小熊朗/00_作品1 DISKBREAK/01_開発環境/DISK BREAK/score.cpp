@@ -148,6 +148,7 @@ void CScore::Update(void)
 			}
 		}
 		break;
+
 	default:
 		break;
 	}

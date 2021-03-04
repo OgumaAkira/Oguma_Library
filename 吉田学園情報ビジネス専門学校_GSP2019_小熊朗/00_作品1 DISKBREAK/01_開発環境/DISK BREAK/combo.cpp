@@ -15,6 +15,8 @@
 //*****************************************************************************
 #include <stdio.h>
 #include "combo.h"
+#include "comboUI.h"
+#include "combobonus.h"
 
 //*****************************************************************************
 //静的メンバ変数
@@ -31,7 +33,6 @@ CCombo::CCombo(int nPriority) :CScene(nPriority)
 	m_nColor = 0;							//色数値
 	m_nCombo = 0;							//コンボ数
 	m_nComboScore = 0;						//コンボスコア値
-	m_nComboCountFrame = 0;					//コンボのカウントフレーム
 	for (int nCount = 0; nCount < MAX_COMBO_NUMBER; nCount++)
 	{
 		m_apNumber[nCount] = NULL;		//ナンバーのポインタ配列
@@ -65,17 +66,17 @@ CCombo * CCombo::Create()
 //*****************************************************************************
 HRESULT CCombo::Init()
 {
-	m_nColor = 255;							//色数値
+	m_nColor = 0;							//色数値
 	m_nCombo = 0;							//コンボ数
 	m_nComboScore = 0;						//コンボスコア値
-	m_nComboCountFrame = 0;					//コンボのカウントフレーム
-
-	//スコアの生成
+	m_bCombo = false;						//コンボの表示切替
+	//ナンバーの生成
 	for (int nCntInit = 0; nCntInit < MAX_COMBO_NUMBER; nCntInit++)
 	{
 		m_apNumber[nCntInit] = CNumber::Create(
 			D3DXVECTOR3((float)(COMBOUI_SIZEX + 5 + (COMBO_SIZE_X / 2) + (COMBO_POS_X *nCntInit)), COMBO_POS_Y, 0),
 			D3DXVECTOR3(COMBO_SIZE_X, COMBO_SIZE_Y, 0), 0);
+		m_apNumber[nCntInit]->SetColor(D3DXCOLOR(0, 0, 0, 0));
 	}
 	return S_OK;
 }
@@ -104,7 +105,6 @@ void CCombo::Update(void)
 	switch (CManager::GetMode())
 	{
 	case CManager::MODE_GAME:
-
 		for (int nCntUpdate = 0; nCntUpdate < MAX_COMBO_NUMBER; nCntUpdate++)
 		{
 			if (m_apNumber[nCntUpdate] != NULL)
@@ -114,7 +114,6 @@ void CCombo::Update(void)
 				m_apNumber[(MAX_COMBO_NUMBER - 1) - nCntUpdate]->SetNumber(nCombo);
 			}
 		}
-
 		break;
 
 	default:
@@ -138,41 +137,60 @@ void CCombo::Draw(void)
 }
 
 //*****************************************************************************
-//乱数取得位置関数
+//コンボ関数
 //*****************************************************************************
 void CCombo::ComboAction(void)
 {
-	if (CGame::GetGameState()==CGame::GAMESTATE_ENEMYBREAK)
+	//コンボ数による色変化
+	for (int nCnt = 0; nCnt < MAX_COMBO_NUMBER; nCnt++)
 	{
+		if (m_nCombo >= 0 && m_nCombo < 10)
+		{
+			m_apNumber[nCnt]->SetColor(D3DXCOLOR(m_nColor, m_nColor, m_nColor, m_nColor));
+		}
+		else if (m_nCombo >= 10 && m_nCombo < 20)
+		{
+			m_apNumber[nCnt]->SetColor(D3DXCOLOR(0, m_nColor, 0, m_nColor));
+		}
+		else if (m_nCombo >= 20 && m_nCombo < 30)
+		{
+			m_apNumber[nCnt]->SetColor(D3DXCOLOR(0, 0, m_nColor, m_nColor));
+		}
+		else if (m_nCombo >= 30 && m_nCombo < 40)
+		{
+			m_apNumber[nCnt]->SetColor(D3DXCOLOR(m_nColor, 0, 0, m_nColor));
+		}
+	}
+
+	switch (CGame::GetGameState())
+	{
+	case CGame::GAMESTATE_ENEMYBREAK:
+		m_nColor = 1.0f;
+		m_nComboScore = 0;
 		m_nCombo += 1;
-		m_nColor = 0;
-		m_nComboCountFrame = 0;
-	}
+		m_bCombo = true;
+		break;
 
-	//経過カウントフレーム
-	else if (CGame::GetGameState() == CGame::GAMESTATE_NORMAL)
-	{
-		m_nColor += 1;
-		m_nComboCountFrame++;
-		if (m_nColor >= 255)
+	case CGame::GAMESTATE_NORMAL:
+		if (m_nColor > 0 && m_nColor <= 1.0f)
 		{
-			m_nColor = 255;
+			m_nColor -= 0.006f;
+			break;
 		}
-		for (int nCnt = 0; nCnt < MAX_COMBO_NUMBER; nCnt++)
+		else if(m_bCombo == true && m_nColor < 0)
 		{
-			m_apNumber[nCnt]->SetColor(D3DCOLOR_RGBA(255 - m_nColor,
-													 255 - m_nColor,
-													 255 - m_nColor,
-													 255 - m_nColor));
+			m_nColor = 0;									//色を消す
+			m_nComboScore = m_nCombo * 250;					//コンボのスコア値
+			SetSocreCombo(m_nComboScore);					//コンボスコアを格納
+			CManager::GetScore()->AddScore(m_nComboScore);	//加算スコア
+			m_nCombo = 0;
+			m_bCombo = false;
+			break;
 		}
-	}
+		break;
 
-	//一定フレーム以上経過もしくはゲーム終了時
-	 if (m_nComboCountFrame > 255 || CGame::GetGameState() == CGame::GAMESTATE_END)
-	{
-		m_nComboScore = m_nCombo * 250;					//コンボのスコア値
- 		CManager::GetScore() -> AddScore(m_nComboScore);	//加算スコア
-		m_nComboCountFrame = 0;
-		m_nCombo = 0;
+	default:
+		break;
 	}
+	SetbCombo(m_bCombo);
 }

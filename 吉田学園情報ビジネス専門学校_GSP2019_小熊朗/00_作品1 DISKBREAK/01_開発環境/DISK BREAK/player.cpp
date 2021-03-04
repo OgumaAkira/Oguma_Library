@@ -20,7 +20,6 @@ CPlayer::CPlayer(int nPriority) :CScene2D(nPriority)
 	m_pos = D3DXVECTOR3(0, 0, 0);				// ポリゴンの位置
 	m_size = D3DXVECTOR3(0, 0, 0);				// ポリゴン大きさ
 	m_nColor = 0;								// ポリゴンの色
-
 }
 
 //*****************************************************************************
@@ -84,8 +83,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 	SetPosition(m_pos);
 	m_size = D3DXVECTOR3(size.x, size.y, 0);	//大きさ
 	SetSize(m_size);
-	m_nColor = 255;
-	SetObjType(OBJTYPE_CURSOR);						//オブジェクト指定格納
+	SetObjType(OBJTYPE_CURSOR);					//オブジェクト指定格納
 	BirdTexture(m_pTexture);					//テクスチャの情報をscene2dに持ってく
 	return S_OK;;
 }
@@ -103,7 +101,6 @@ void CPlayer::Uninit(void)
 //*****************************************************************************
 void CPlayer::Update(void)
 {
-
 	POINT posPoint;
 	GetCursorPos(&posPoint);											//マウス座標を取得する
 	m_pos = D3DXVECTOR3((float)posPoint.x, (float)posPoint.y, 0.0f);	//位置
@@ -140,7 +137,9 @@ void CPlayer::Update(void)
 							D3DXVECTOR3(0, 0, 0), CBullet::BULLET_TYPE_PLAYER);
 
 			//サウンド
+#if DEBUG_SOUND
 			pSound->PlaySound(CSound::SOUND_LABEL_SE_SHOT);
+#endif // DEBUG_SOUND
 		}
 		//ゲーム画面以外でオブジェクトがカーソルかつフェード値が最大である場合
 		else if(CManager::GetMode() != CManager::MODE_GAME&&
@@ -153,9 +152,7 @@ void CPlayer::Update(void)
 							D3DXVECTOR3(0, 0, 0), CBullet::BULLET_TYPE_CURSOR);
 		}
 	}
-
-	//プレイヤーの位置行進
-	SetPosition(m_pos);
+	SetPosition(m_pos);//プレイヤーの位置行進
 }
 
 //*****************************************************************************
@@ -173,8 +170,7 @@ void CPlayer::MarkerColor(void)
 {
 	for (int nCntScene = 0; nCntScene < MAX_TEXTURE; nCntScene++)
 	{
-		//判定なし
-		bool bHit = false;
+		bool bHit = false;		//判定なし
 		for (int nCountPriority = 0; nCountPriority < PRIORITY_MAX; nCountPriority++)
 		{
 			//シーンの情報取得
@@ -206,8 +202,7 @@ void CPlayer::MarkerColor(void)
 					}
 					else
 					{
-						//元の色に戻す
-						SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+						SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));			//元の色に戻す
 					}
 				}
 				//ボタンの当たり判定
@@ -229,8 +224,7 @@ void CPlayer::MarkerColor(void)
 					}
 					else
 					{
-						//元の色に戻す
-						SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+						SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));			//元の色に戻す
 					}
 				}
 			}

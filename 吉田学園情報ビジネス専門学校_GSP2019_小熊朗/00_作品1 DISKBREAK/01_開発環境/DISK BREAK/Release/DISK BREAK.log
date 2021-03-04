@@ -1,0 +1,27 @@
+﻿  bg.cpp
+  bullet.cpp
+  bulletUI.cpp
+  button.cpp
+  enemy.cpp
+  explosion.cpp
+  fade.cpp
+  game.cpp
+  hiscore.cpp
+  hiscoreUI.cpp
+  input.cpp
+  main.cpp
+main.cpp(60): fatal error C1017: 整数定数式が無効です。
+  manager.cpp
+  number.cpp
+  player.cpp
+  renderer.cpp
+  result.cpp
+  scene.cpp
+  scene2d.cpp
+  score.cpp
+  コンパイル中...
+  sound.cpp
+  speed.cpp
+  titielogo.cpp
+  title.cpp
+  tutorial.cpp

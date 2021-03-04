@@ -103,7 +103,7 @@ HRESULT CNumber::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size, int nTex)
 	pVtx[2].pos = D3DXVECTOR3(m_pos.x - m_size.x / 2, m_pos.y + m_size.y / 2, 0.0f);	//ç∂â∫
 	pVtx[3].pos = D3DXVECTOR3(m_pos.x + m_size.x / 2, m_pos.y + m_size.y / 2, 0.0f);	//âEâ∫
 
-	//rhwÇÃê›íË
+	//rhwÇÃê›íË 
 	pVtx[0].rhw = 1.0f;	//ç∂è„
 	pVtx[1].rhw = 1.0f;	//âEè„
 	pVtx[2].rhw = 1.0f;	//ç∂â∫

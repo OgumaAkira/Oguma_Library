@@ -155,6 +155,7 @@ void CButton::Update(void)
 		}
 		//F‚Ì•ÏX
 		SetColor(D3DCOLOR_RGBA(255, 0, 0, 255));//Ô
+		m_pFade->SetFade(CFade::FADESTATE_IN); 
 		break;
 
 	case BUTTONSTATE_PAUSETITLE:

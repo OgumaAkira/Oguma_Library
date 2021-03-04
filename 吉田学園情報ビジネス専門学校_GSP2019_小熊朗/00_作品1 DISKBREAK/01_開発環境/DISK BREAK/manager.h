@@ -38,6 +38,8 @@ class CSpeed;
 class CComboUI;
 class CUi;
 class CPause;
+class CComboBonus;
+class CComboBonusUI;
 
 //*****************************************************************************
 //オブジェクト2クラス宣言
@@ -59,26 +61,28 @@ public:
 	~CManager();																//デストラクタ
 
 	//メンバ関数
-	HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bMenu);					//初期化関数
-	void Uninit(void);															//終了関数
-	void Update(void);															//更新関数
-	void Draw(void);															//描画関数
-	static CRenderer		*GetRenderer(void)		{ return m_pRenderer; }		//レンダラーの情報取得関数
-	static CInputKeyboard	*GetInputKeyboard(void) { return m_pInputKeyboard; }//キーボード入力情報取得関数
-	static CMouse			*GetMouse(void)			{ return m_pMouse; }		//マウス入力情報取得関数
-	static CPlayer			*GetPlayer(void)		{ return m_pPlayer; }		//プレイヤー情報取得関数
-	static CEnemy			*GetEnemy(void)			{ return m_pEnemy; }		//エネミー情報取得関数
-	static CSound			*GetSound(void)			{ return m_pSound; }		//サウンド情報取得関数
-	static CExplosion		*GetExplosion(void)		{ return m_pExplosion; }	//爆発情報取得関数
-	static CBullet			*GetBullet(void)		{ return m_pBullet; }		//バレット情報取得関数
-	static CButton			*GetButton(void)		{ return m_pButton; }		//ボタン情報取得関数
-	static CScore			*GetScore(void)			{ return m_pScore; }		//スコア取得関数
-	static CFade			*GetFade(void)			{ return m_pFade; }			//フェード取得関数
-	static CCombo			*GetCombo(void)			{ return m_pCombo; }		//コンボ取得関数
-	static CSpeed			*GetSpeed(void)			{ return m_pSpeed; }		//スピードUI取得関数
-	static CUi				*GetUi(void)			{ return m_pUi; }			//UI取得関数
-	static CComboUI			*GetComboUI(void)		{ return m_pComboUI; }		//コンボUI取得関数
-	static MODE				GetMode(void)			{ return m_mode; }			//モード情報取得関数
+	HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bMenu);						//初期化関数
+	void Uninit(void);																//終了関数
+	void Update(void);																//更新関数
+	void Draw(void);																//描画関数
+	static CRenderer		*GetRenderer(void)		{ return m_pRenderer; }			//レンダラーの情報取得関数
+	static CInputKeyboard	*GetInputKeyboard(void) { return m_pInputKeyboard; }	//キーボード入力情報取得関数
+	static CMouse			*GetMouse(void)			{ return m_pMouse; }			//マウス入力情報取得関数
+	static CPlayer			*GetPlayer(void)		{ return m_pPlayer; }			//プレイヤー情報取得関数
+	static CEnemy			*GetEnemy(void)			{ return m_pEnemy; }			//エネミー情報取得関数
+	static CSound			*GetSound(void)			{ return m_pSound; }			//サウンド情報取得関数
+	static CExplosion		*GetExplosion(void)		{ return m_pExplosion; }		//爆発情報取得関数
+	static CBullet			*GetBullet(void)		{ return m_pBullet; }			//バレット情報取得関数
+	static CButton			*GetButton(void)		{ return m_pButton; }			//ボタン情報取得関数
+	static CScore			*GetScore(void)			{ return m_pScore; }			//スコア取得関数
+	static CFade			*GetFade(void)			{ return m_pFade; }				//フェード取得関数
+	static CCombo			*GetCombo(void)			{ return m_pCombo; }			//コンボ取得関数
+	static CSpeed			*GetSpeed(void)			{ return m_pSpeed; }			//スピードUI取得関数
+	static CUi				*GetUi(void)			{ return m_pUi; }				//UI取得関数
+	static CComboUI			*GetComboUI(void)		{ return m_pComboUI; }			//コンボUI取得関数
+	static CComboBonus		*GetComboBonus(void)	{ return m_pComboBonus; }		//コンボスコア取得関数
+	static CComboBonusUI	*GetGetComboBonusUI(void) { return m_pComboBonusUI; }	//コンボスコア取得関数
+	static MODE				GetMode(void)			{ return m_mode; }				//モード情報取得関数
 	static void				SetMode(MODE mode);
 
 private:
@@ -104,6 +108,8 @@ private:
 	static CSpeed			*m_pSpeed;					//スピードUIのポインタ
 	static CUi				*m_pUi;						//UIの情報
 	static CComboUI			*m_pComboUI;				//コンボUIのポインタ
+	static CComboBonus		*m_pComboBonus;				//コンボボーナスのポインタ
+	static CComboBonusUI	*m_pComboBonusUI;			//コンボボーナスUIのポインタ
 	static MODE				m_mode;						//モードの情報
 	CInput					*m_pInput;					//入力のポインタ
 
